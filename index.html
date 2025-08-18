@@ -1,1 +1,565 @@
-hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Username's GitHub Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS for the minimalist blue-accent theme with animations */
+        :root {
+            --primary-bg: #F4F7F9;
+            --secondary-bg: #FFFFFF;
+            --text-color: #1A202C;
+            --accent-blue: #4299E1;
+            --accent-blue-light: #BEE3F8;
+            --accent-blue-dark: #3182CE;
+            --border-color: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--secondary-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: var(--accent-blue);
+            padding: 0.5rem 0;
+        }
+
+        nav a {
+            color: var(--secondary-bg);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav a:hover {
+            background-color: var(--accent-blue-dark);
+        }
+
+        nav a.active {
+            background-color: var(--accent-blue-dark);
+        }
+
+        .content {
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .subpage {
+            /* Animation for subpage transitions */
+            transform: translateX(100%);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            box-sizing: border-box;
+            z-index: 0;
+        }
+
+        .subpage.active {
+            transform: translateX(0);
+            opacity: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-wrapper {
+            position: relative;
+            min-height: 400px; /* Adjust as needed */
+            overflow: hidden;
+        }
+
+        /* General content styling */
+        h2 {
+            font-size: 1.6rem;
+            color: var(--accent-blue-dark);
+            border-bottom: 2px solid var(--accent-blue-light);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        /* ICT318 specific styling */
+        .cipher-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .cipher-block {
+            background-color: var(--primary-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .cipher-block h3 {
+            margin-top: 0;
+            color: var(--accent-blue);
+        }
+
+        .cipher-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        input[type="text"], textarea {
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: var(--secondary-bg);
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        button {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: var(--accent-blue-dark);
+            transform: translateY(-2px);
+        }
+
+        .result-box {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: var(--accent-blue-light);
+            border-radius: 8px;
+            border: 1px solid var(--accent-blue);
+        }
+        
+        .result-box h4 {
+            margin-top: 0;
+            color: var(--accent-blue-dark);
+            border-bottom: 1px solid var(--accent-blue);
+            padding-bottom: 0.5rem;
+        }
+
+        .step-by-step {
+            font-family: monospace;
+            white-space: pre-wrap;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav a {
+                text-align: center;
+                border-bottom: 1px solid var(--accent-blue-dark);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>My GitHub Page</h1>
+        </header>
+
+        <nav>
+            <a href="#eng335" class="active">ENG335</a>
+            <a href="#ict225">ICT225</a>
+            <a href="#ict239">ICT239</a>
+            <a href="#ict318">ICT318</a>
+        </nav>
+
+        <div class="page-wrapper">
+            <!-- ENG335 - Machine Learning -->
+            <div id="eng335" class="subpage active">
+                <h2>ENG335 - Machine Learning</h2>
+                <p>Welcome to the Machine Learning section. This page will be updated with projects and information related to ENG335, covering topics such as supervised learning, unsupervised learning, neural networks, and model evaluation.</p>
+                <p>Stay tuned for future updates and code examples!</p>
+            </div>
+
+            <!-- ICT225 - Management Information Systems -->
+            <div id="ict225" class="subpage">
+                <h2>ICT225 - Management Information Systems</h2>
+                <p>This section is dedicated to my work in Management Information Systems (ICT225). Here you'll find information on how technology and information systems are used to support business operations, decision-making, and organizational strategy.</p>
+                <p>Topics include enterprise systems, data management, and the role of MIS in modern organizations.</p>
+            </div>
+
+            <!-- ICT239 - Web Application Development -->
+            <div id="ict239" class="subpage">
+                <h2>ICT239 - Web Application Development</h2>
+                <p>Explore my projects from the Web Application Development course (ICT239). This page will showcase my skills in front-end and back-end web technologies, including HTML, CSS, JavaScript, and various frameworks.</p>
+                <p>Future content will include live demos and source code for the applications I develop.</p>
+            </div>
+
+            <!-- ICT318 - Network Security -->
+            <div id="ict318" class="subpage">
+                <h2>ICT318 - Network Security</h2>
+                <p>This is the hub for Network Security (ICT318). Below, you can explore and interact with three classic ciphers: Caesar, Vigenère, and Vernam. Use the tools to encipher or decipher text and see the step-by-step solution for each operation.</p>
+                
+                <div class="cipher-container">
+                    
+                    <!-- Caesar Cipher -->
+                    <div class="cipher-block">
+                        <h3>Caesar Cipher</h3>
+                        <div class="cipher-form">
+                            <div class="form-row">
+                                <label for="caesar-text">Plaintext / Ciphertext</label>
+                                <textarea id="caesar-text" rows="3" placeholder="Enter text here..."></textarea>
+                            </div>
+                            <div class="form-row">
+                                <label for="caesar-key">Key (1-25)</label>
+                                <input type="number" id="caesar-key" min="1" max="25" value="3">
+                            </div>
+                            <div class="radio-group">
+                                <label><input type="radio" name="caesar-mode" value="encipher" checked> Encipher</label>
+                                <label><input type="radio" name="caesar-mode" value="decipher"> Decipher</label>
+                            </div>
+                            <button onclick="runCaesarCipher()">Run Caesar Cipher</button>
+                        </div>
+                        <div id="caesar-result" class="result-box" style="display:none;">
+                            <h4>Result & Steps</h4>
+                            <pre class="step-by-step"></pre>
+                        </div>
+                    </div>
+
+                    <!-- Vigenère Cipher -->
+                    <div class="cipher-block">
+                        <h3>Vigenère Cipher</h3>
+                        <div class="cipher-form">
+                            <div class="form-row">
+                                <label for="vigenere-text">Plaintext / Ciphertext</label>
+                                <textarea id="vigenere-text" rows="3" placeholder="Enter text here..."></textarea>
+                            </div>
+                            <div class="form-row">
+                                <label for="vigenere-key">Key (word or phrase)</label>
+                                <input type="text" id="vigenere-key" placeholder="Enter key here...">
+                            </div>
+                            <div class="radio-group">
+                                <label><input type="radio" name="vigenere-mode" value="encipher" checked> Encipher</label>
+                                <label><input type="radio" name="vigenere-mode" value="decipher"> Decipher</label>
+                            </div>
+                            <button onclick="runVigenereCipher()">Run Vigenère Cipher</button>
+                        </div>
+                        <div id="vigenere-result" class="result-box" style="display:none;">
+                            <h4>Result & Steps</h4>
+                            <pre class="step-by-step"></pre>
+                        </div>
+                    </div>
+
+                    <!-- Vernam Cipher -->
+                    <div class="cipher-block">
+                        <h3>Vernam Cipher (One-Time Pad)</h3>
+                        <p style="font-size:0.9rem;">
+                            The key must be the same length as the plaintext/ciphertext.
+                        </p>
+                        <div class="cipher-form">
+                            <div class="form-row">
+                                <label for="vernam-text">Plaintext / Ciphertext</label>
+                                <textarea id="vernam-text" rows="3" placeholder="Enter text here..."></textarea>
+                            </div>
+                            <div class="form-row">
+                                <label for="vernam-key">Key (same length as text)</label>
+                                <input type="text" id="vernam-key" placeholder="Enter key here...">
+                            </div>
+                            <div class="radio-group">
+                                <label><input type="radio" name="vernam-mode" value="encipher" checked> Encipher</label>
+                                <label><input type="radio" name="vernam-mode" value="decipher"> Decipher</label>
+                            </div>
+                            <button onclick="runVernamCipher()">Run Vernam Cipher</button>
+                        </div>
+                        <div id="vernam-result" class="result-box" style="display:none;">
+                            <h4>Result & Steps</h4>
+                            <pre class="step-by-step"></pre>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for page navigation and cipher logic
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('nav a');
+            const subpages = document.querySelectorAll('.subpage');
+            const pageWrapper = document.querySelector('.page-wrapper');
+
+            // Find the active page on load and show it
+            const initialHash = window.location.hash || '#eng335';
+            showPage(initialHash);
+
+            // Handle navigation clicks
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetPage = e.target.getAttribute('href');
+                    history.pushState(null, '', targetPage);
+                    showPage(targetPage);
+                });
+            });
+
+            // Handle back/forward button
+            window.addEventListener('popstate', () => {
+                const currentHash = window.location.hash || '#eng335';
+                showPage(currentHash);
+            });
+
+            function showPage(pageId) {
+                // Determine the direction for the animation
+                const currentPage = document.querySelector('.subpage.active');
+                let direction = 1; // 1 for slide in from right, -1 for slide in from left
+
+                if (currentPage) {
+                    const currentPageIndex = Array.from(subpages).findIndex(p => p.id === currentPage.id);
+                    const newPageIndex = Array.from(subpages).findIndex(p => p.id === pageId.slice(1));
+                    if (newPageIndex < currentPageIndex) {
+                        direction = -1;
+                    }
+                }
+
+                // Hide all subpages
+                subpages.forEach(page => {
+                    page.classList.remove('active');
+                    page.style.transform = `translateX(${direction * 100}%)`;
+                });
+
+                // Show the target subpage with animation
+                const targetPage = document.querySelector(pageId);
+                if (targetPage) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    document.querySelector(`nav a[href="${pageId}"]`).classList.add('active');
+
+                    // Small timeout to allow transition
+                    setTimeout(() => {
+                        targetPage.classList.add('active');
+                        pageWrapper.style.minHeight = targetPage.clientHeight + 'px';
+                    }, 100);
+                }
+            }
+        });
+
+        /* --- Cipher Functions --- */
+
+        const getAlphabet = () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        // Helper function to format the result and steps
+        function displayResult(result, steps, elementId) {
+            const resultBox = document.getElementById(elementId);
+            const stepPre = resultBox.querySelector('.step-by-step');
+            
+            stepPre.innerHTML = `Final Result: ${result}\n\n--- Step-by-Step Breakdown ---\n${steps.join('\n')}`;
+            resultBox.style.display = 'block';
+        }
+
+        // --- Caesar Cipher Logic ---
+        function runCaesarCipher() {
+            const text = document.getElementById('caesar-text').value.toUpperCase();
+            let key = parseInt(document.getElementById('caesar-key').value, 10);
+            const mode = document.querySelector('input[name="caesar-mode"]:checked').value;
+            const alphabet = getAlphabet();
+            const steps = [];
+            let result = '';
+
+            if (isNaN(key) || key < 1 || key > 25) {
+                alert('Please enter a valid key between 1 and 25.');
+                return;
+            }
+
+            if (mode === 'decipher') {
+                key = (26 - key) % 26; // For decryption, we shift backwards
+            }
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (alphabet.includes(char)) {
+                    const originalIndex = alphabet.indexOf(char);
+                    const newIndex = (originalIndex + key) % 26;
+                    const newChar = alphabet[newIndex];
+                    result += newChar;
+
+                    steps.push(`- ${mode === 'encipher' ? 'Plaintext' : 'Ciphertext'} character: ${char} (${originalIndex})`);
+                    steps.push(`  Shift: ${mode === 'encipher' ? '' : '-'} ${document.getElementById('caesar-key').value}`);
+                    steps.push(`  Calculation: (${originalIndex} + ${mode === 'encipher' ? key : (26-key)}) mod 26 = ${newIndex}`);
+                    steps.push(`  Resulting character: ${newChar}`);
+                } else {
+                    result += char;
+                    steps.push(`- Character "${char}" is not in the alphabet. It remains unchanged.`);
+                }
+            }
+            
+            displayResult(result, steps, 'caesar-result');
+        }
+
+        // --- Vigenère Cipher Logic ---
+        function runVigenereCipher() {
+            const text = document.getElementById('vigenere-text').value.toUpperCase();
+            let key = document.getElementById('vigenere-key').value.toUpperCase();
+            const mode = document.querySelector('input[name="vigenere-mode"]:checked').value;
+            const alphabet = getAlphabet();
+            const steps = [];
+            let result = '';
+            
+            if (!key) {
+                alert('Please enter a valid key.');
+                return;
+            }
+
+            let keyIndex = 0;
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (alphabet.includes(char)) {
+                    const charIndex = alphabet.indexOf(char);
+                    const keyChar = key[keyIndex % key.length];
+                    const keyIndexVal = alphabet.indexOf(keyChar);
+
+                    let newIndex;
+                    if (mode === 'encipher') {
+                        newIndex = (charIndex + keyIndexVal) % 26;
+                        steps.push(`- Plaintext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndexVal})`);
+                        steps.push(`  Calculation: (${charIndex} + ${keyIndexVal}) mod 26 = ${newIndex}`);
+                    } else { // decipher
+                        newIndex = (charIndex - keyIndexVal + 26) % 26;
+                        steps.push(`- Ciphertext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndexVal})`);
+                        steps.push(`  Calculation: (${charIndex} - ${keyIndexVal} + 26) mod 26 = ${newIndex}`);
+                    }
+                    
+                    const newChar = alphabet[newIndex];
+                    result += newChar;
+                    steps.push(`  Resulting character: ${newChar}`);
+                    keyIndex++;
+                } else {
+                    result += char;
+                    steps.push(`- Character "${char}" is not in the alphabet. It remains unchanged.`);
+                }
+            }
+            
+            displayResult(result, steps, 'vigenere-result');
+        }
+
+        // --- Vernam Cipher Logic (One-Time Pad) ---
+        function runVernamCipher() {
+            const text = document.getElementById('vernam-text').value.toUpperCase();
+            const key = document.getElementById('vernam-key').value.toUpperCase();
+            const mode = document.querySelector('input[name="vernam-mode"]:checked').value;
+            const alphabet = getAlphabet();
+            const steps = [];
+            let result = '';
+
+            if (!key || key.length !== text.length) {
+                alert('The key must be the same length as the text for the Vernam Cipher.');
+                return;
+            }
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const keyChar = key[i];
+                
+                if (alphabet.includes(char) && alphabet.includes(keyChar)) {
+                    const charIndex = alphabet.indexOf(char);
+                    const keyIndex = alphabet.indexOf(keyChar);
+                    
+                    let newIndex;
+                    if (mode === 'encipher') {
+                        newIndex = (charIndex + keyIndex) % 26;
+                        steps.push(`- Plaintext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndex})`);
+                        steps.push(`  Calculation: (${charIndex} + ${keyIndex}) mod 26 = ${newIndex}`);
+                    } else { // decipher
+                        newIndex = (charIndex - keyIndex + 26) % 26;
+                        steps.push(`- Ciphertext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndex})`);
+                        steps.push(`  Calculation: (${charIndex} - ${keyIndex} + 26) mod 26 = ${newIndex}`);
+                    }
+                    
+                    const newChar = alphabet[newIndex];
+                    result += newChar;
+                    steps.push(`  Resulting character: ${newChar}`);
+                } else {
+                    result += char;
+                    steps.push(`- Character "${char}" or key character "${keyChar}" is not in the alphabet. They remain unchanged.`);
+                }
+            }
+            
+            displayResult(result, steps, 'vernam-result');
+        }
+    </script>
+
+</body>
+</html>
