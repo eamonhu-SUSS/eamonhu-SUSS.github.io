@@ -74,6 +74,7 @@
 
         nav a:hover {
             background-color: var(--accent-blue-dark);
+            transform: scale(1.05); /* Added hover animation */
         }
 
         nav a.active {
@@ -85,31 +86,22 @@
             overflow: hidden;
         }
 
+        /* Simplified transition with opacity for reliability */
         .subpage {
-            /* Animation for subpage transitions */
-            transform: translateX(100%);
             opacity: 0;
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 2rem;
-            box-sizing: border-box;
-            z-index: 0;
+            transition: opacity 0.5s ease;
+            display: none; /* Hide the page by default */
         }
 
         .subpage.active {
-            transform: translateX(0);
             opacity: 1;
-            position: relative;
-            z-index: 1;
         }
 
         .page-wrapper {
             position: relative;
             min-height: 400px; /* Adjust as needed */
             overflow: hidden;
+            padding: 2rem;
         }
 
         /* General content styling */
@@ -137,6 +129,12 @@
             padding: 1.5rem;
             border-radius: 8px;
             border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Added animation */
+        }
+
+        .cipher-block:hover {
+            transform: translateY(-5px); /* Added lift effect on hover */
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
         }
 
         .cipher-block h3 {
@@ -384,35 +382,28 @@
             });
 
             function showPage(pageId) {
-                // Determine the direction for the animation
-                const currentPage = document.querySelector('.subpage.active');
-                let direction = 1; // 1 for slide in from right, -1 for slide in from left
-
-                if (currentPage) {
-                    const currentPageIndex = Array.from(subpages).findIndex(p => p.id === currentPage.id);
-                    const newPageIndex = Array.from(subpages).findIndex(p => p.id === pageId.slice(1));
-                    if (newPageIndex < currentPageIndex) {
-                        direction = -1;
-                    }
-                }
-
-                // Hide all subpages
+                // First, hide all subpages and set their display to none
                 subpages.forEach(page => {
                     page.classList.remove('active');
-                    page.style.transform = `translateX(${direction * 100}%)`;
+                    page.style.display = 'none';
                 });
 
-                // Show the target subpage with animation
+                // Get the target subpage
                 const targetPage = document.querySelector(pageId);
                 if (targetPage) {
+                    // Update navigation links
                     navLinks.forEach(link => link.classList.remove('active'));
                     document.querySelector(`nav a[href="${pageId}"]`).classList.add('active');
 
-                    // Small timeout to allow transition
+                    // Set the display of the new page to block, but keep opacity 0
+                    targetPage.style.display = 'block';
+
+                    // Use a small timeout to force a browser reflow and then apply the active class
                     setTimeout(() => {
                         targetPage.classList.add('active');
+                        // Set the height of the wrapper to match the content
                         pageWrapper.style.minHeight = targetPage.clientHeight + 'px';
-                    }, 100);
+                    }, 10);
                 }
             }
         });
