@@ -30,6 +30,7 @@
             min-height: 100vh;
             padding: 2rem 1rem;
             box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
         .container {
@@ -74,7 +75,7 @@
 
         nav a:hover {
             background-color: var(--accent-blue-dark);
-            transform: scale(1.05); /* Added hover animation */
+            transform: scale(1.05);
         }
 
         nav a.active {
@@ -86,22 +87,23 @@
             overflow: hidden;
         }
 
-        /* Simplified transition with opacity for reliability */
         .subpage {
             opacity: 0;
             transition: opacity 0.5s ease;
-            display: none; /* Hide the page by default */
+            display: none;
         }
 
         .subpage.active {
             opacity: 1;
+            display: block;
         }
 
         .page-wrapper {
             position: relative;
-            min-height: 400px; /* Adjust as needed */
-            overflow: hidden;
+            min-height: 400px;
+            overflow-y: auto;
             padding: 2rem;
+            max-height: calc(100vh - 200px);
         }
 
         /* General content styling */
@@ -112,9 +114,71 @@
             padding-bottom: 0.5rem;
             margin-bottom: 1rem;
         }
+        
+        h3 {
+            font-size: 1.2rem;
+            color: var(--accent-blue-dark);
+            margin-top: 2rem;
+            padding-top: 1rem;
+        }
 
         p {
             line-height: 1.6;
+        }
+
+        /* Sub-navigation for Past Semesters Index */
+        .sub-nav {
+            display: flex;
+            justify-content: flex-start;
+            gap: 1rem;
+            margin: -2rem -2rem 2rem -2rem; /* Pull into padding to align with container */
+            padding: 1rem 2rem;
+            background-color: var(--secondary-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky; /* Make the sub-nav bar sticky */
+            top: 0; /* Stick to the top of the container */
+            z-index: 10;
+        }
+
+        .sub-nav a {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+        }
+
+        .sub-nav a:hover {
+            background-color: var(--border-color);
+        }
+
+        .sub-nav a.active {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        .course-link {
+            display: block;
+            background-color: var(--primary-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .course-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-link h4 {
+            margin: 0;
+            color: var(--accent-blue);
         }
 
         /* ICT318 specific styling */
@@ -129,11 +193,11 @@
             padding: 1.5rem;
             border-radius: 8px;
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Added animation */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .cipher-block:hover {
-            transform: translateY(-5px); /* Added lift effect on hover */
+            transform: translateY(-5px);
             box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
         }
 
@@ -242,37 +306,34 @@
             <a href="#ict225">ICT225</a>
             <a href="#ict239">ICT239</a>
             <a href="#ict318">ICT318</a>
+            <a href="#past-semesters">Past Semesters</a>
         </nav>
 
         <div class="page-wrapper">
-            <!-- ENG335 - Machine Learning -->
+            <!-- Current Semester Courses -->
             <div id="eng335" class="subpage active">
                 <h2>ENG335 - Machine Learning</h2>
                 <p>Welcome to the Machine Learning section. This page will be updated with projects and information related to ENG335, covering topics such as supervised learning, unsupervised learning, neural networks, and model evaluation.</p>
                 <p>Stay tuned for future updates and code examples!</p>
             </div>
-
-            <!-- ICT225 - Management Information Systems -->
+            
             <div id="ict225" class="subpage">
                 <h2>ICT225 - Management Information Systems</h2>
                 <p>This section is dedicated to my work in Management Information Systems (ICT225). Here you'll find information on how technology and information systems are used to support business operations, decision-making, and organizational strategy.</p>
                 <p>Topics include enterprise systems, data management, and the role of MIS in modern organizations.</p>
             </div>
-
-            <!-- ICT239 - Web Application Development -->
+            
             <div id="ict239" class="subpage">
                 <h2>ICT239 - Web Application Development</h2>
                 <p>Explore my projects from the Web Application Development course (ICT239). This page will showcase my skills in front-end and back-end web technologies, including HTML, CSS, JavaScript, and various frameworks.</p>
                 <p>Future content will include live demos and source code for the applications I develop.</p>
             </div>
-
-            <!-- ICT318 - Network Security -->
+            
             <div id="ict318" class="subpage">
                 <h2>ICT318 - Network Security</h2>
                 <p>This is the hub for Network Security (ICT318). Below, you can explore and interact with three classic ciphers: Caesar, Vigenère, and Vernam. Use the tools to encipher or decipher text and see the step-by-step solution for each operation.</p>
                 
                 <div class="cipher-container">
-                    
                     <!-- Caesar Cipher -->
                     <div class="cipher-block">
                         <h3>Caesar Cipher</h3>
@@ -350,6 +411,133 @@
 
                 </div>
             </div>
+
+            <!-- Past Semesters Combined Page -->
+            <div id="past-semesters" class="subpage">
+                <h2>Past Semesters</h2>
+                <div class="sub-nav">
+                    <a href="#semester1-content" id="nav-semester1" class="active">Semester 1</a>
+                    <a href="#semester2-content" id="nav-semester2">Semester 2</a>
+                </div>
+                
+                <div id="semester1-content">
+                    <h3 id="semester1-heading">Semester 1</h3>
+                    <a href="#ict101" class="course-link">
+                        <h4>ICT101 - Computational Thinking</h4>
+                        <p>This course introduced the fundamentals of computational thinking, problem-solving, and algorithmic design.</p>
+                    </a>
+                    <a href="#ict114" class="course-link">
+                        <h4>ICT114 - Computer Architecture</h4>
+                        <p>An exploration of the structure and function of computer systems, including hardware components, memory organization, and data representation.</p>
+                    </a>
+                    <a href="#ict133" class="course-link">
+                        <h4>ICT133 - Structured Programming</h4>
+                        <p>This module focused on the principles of structured programming, including control structures, data types, and function design.</p>
+                    </a>
+                    <a href="#ict246" class="course-link">
+                        <h4>ICT246 - Operating Systems</h4>
+                        <p>A study of operating system concepts, including process management, memory management, file systems, and security.</p>
+                    </a>
+                    <a href="#sst101" class="course-link">
+                        <h4>SST101 - Project Management</h4>
+                        <p>This course covered the methodologies and practices of effective project management, from planning to execution and closure.</p>
+                    </a>
+                    <a href="#nco205" class="course-link">
+                        <h4>NCO205 - User Centered Design</h4>
+                        <p>Focusing on the principles of designing with the user in mind, this course covered usability, accessibility, and user research methods.</p>
+                    </a>
+                </div>
+                
+                <div id="semester2-content">
+                    <h3 id="semester2-heading">Semester 2</h3>
+                    <a href="#ict162" class="course-link">
+                        <h4>ICT162 - Object Oriented Programming</h4>
+                        <p>An introduction to object-oriented programming concepts, including classes, objects, inheritance, and polymorphism.</p>
+                    </a>
+                    <a href="#ict233" class="course-link">
+                        <h4>ICT233 - Data Programming</h4>
+                        <p>This module covered data manipulation and programming techniques for data analysis and visualization.</p>
+                    </a>
+                    <a href="#ict235" class="course-link">
+                        <h4>ICT235 - Data Structures and Algorithms</h4>
+                        <p>A deep dive into fundamental data structures and algorithms, including arrays, linked lists, trees, sorting, and searching.</p>
+                    </a>
+                    <a href="#ict259" class="course-link">
+                        <h4>ICT259 - Computer Networking</h4>
+                        <p>An overview of computer networking principles, from network architecture and protocols to security and wireless communication.</p>
+                    </a>
+                    <a href="#nco103" class="course-link">
+                        <h4>NCO103 - Listen And Be Heard: Effective Communication Through Storytelling</h4>
+                        <p>This course focused on developing communication skills through the art of storytelling and active listening.</p>
+                    </a>
+                    <a href="#nco203" class="course-link">
+                        <h4>NCO203 - Critical Thinking and Problem Solving</h4>
+                        <p>This module enhanced skills in critical thinking, logical reasoning, and structured problem-solving techniques.</p>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Individual Module Pages -->
+            <div id="ict101" class="subpage">
+                <h2>ICT101 - Computational Thinking</h2>
+                <p>This page is a placeholder for projects and details related to **ICT101**. This course introduced me to the core concepts of breaking down problems and designing efficient solutions. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="ict114" class="subpage">
+                <h2>ICT114 - Computer Architecture</h2>
+                <p>This page is a placeholder for projects and details related to **ICT114**. Here I explored how hardware components and software interact, learning about the inner workings of a computer system. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="ict133" class="subpage">
+                <h2>ICT133 - Structured Programming</h2>
+                <p>This page is a placeholder for projects and details related to **ICT133**. This module taught me how to write clean, logical code using fundamental programming constructs. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="ict246" class="subpage">
+                <h2>ICT246 - Operating Systems</h2>
+                <p>This page is a placeholder for projects and details related to **ICT246**. I learned about the crucial role of an operating system in managing a computer's resources. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="sst101" class="subpage">
+                <h2>SST101 - Project Management</h2>
+                <p>This page is a placeholder for projects and details related to **SST101**. I gained valuable skills in planning, executing, and closing projects effectively. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="nco205" class="subpage">
+                <h2>NCO205 - User Centered Design</h2>
+                <p>This page is a placeholder for projects and details related to **NCO205**. This module taught me the importance of designing with the user's needs and experience at the forefront. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="ict162" class="subpage">
+                <h2>ICT162 - Object Oriented Programming</h2>
+                <p>This page is a placeholder for projects and details related to **ICT162**. Here I learned the principles of object-oriented programming, which is key for creating modular and reusable code. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="ict233" class="subpage">
+                <h2>ICT233 - Data Programming</h2>
+                <p>This page is a placeholder for projects and details related to **ICT233**. This course gave me the skills to handle and analyze data programmatically. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="ict235" class="subpage">
+                <h2>ICT235 - Data Structures and Algorithms</h2>
+                <p>This page is a placeholder for projects and details related to **ICT235**. This fundamental course taught me how to organize and efficiently process data. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="ict259" class="subpage">
+                <h2>ICT259 - Computer Networking</h2>
+                <p>This page is a placeholder for projects and details related to **ICT259**. I gained a solid understanding of how computers communicate over networks and the protocols that govern them. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="nco103" class="subpage">
+                <h2>NCO103 - Listen And Be Heard: Effective Communication Through Storytelling</h2>
+                <p>This page is a placeholder for projects and details related to **NCO103**. This course helped me improve my communication skills through the art of storytelling. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
+            <div id="nco203" class="subpage">
+                <h2>NCO203 - Critical Thinking and Problem Solving</h2>
+                <p>This page is a placeholder for projects and details related to **NCO203**. This module honed my ability to analyze complex problems and think critically to find solutions. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>Come back later to see more! ✨</p>
+            </div>
         </div>
     </div>
 
@@ -360,19 +548,33 @@
             const navLinks = document.querySelectorAll('nav a');
             const subpages = document.querySelectorAll('.subpage');
             const pageWrapper = document.querySelector('.page-wrapper');
-
+            
             // Find the active page on load and show it
             const initialHash = window.location.hash || '#eng335';
             showPage(initialHash);
 
-            // Handle navigation clicks
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
+            // Handle all navigation clicks
+            document.addEventListener('click', (e) => {
+                const link = e.target.closest('a');
+                if (link && link.getAttribute('href').startsWith('#')) {
                     e.preventDefault();
-                    const targetPage = e.target.getAttribute('href');
-                    history.pushState(null, '', targetPage);
-                    showPage(targetPage);
-                });
+                    const targetId = link.getAttribute('href');
+                    
+                    // If the link is for "Past Semesters" or a module, update the URL
+                    if (document.querySelector(targetId).classList.contains('subpage')) {
+                        history.pushState(null, '', targetId);
+                        showPage(targetId);
+                    } else {
+                        // For sub-nav links within "Past Semesters", just scroll
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            pageWrapper.scrollTo({
+                                top: targetElement.offsetTop - document.querySelector('.sub-nav').offsetHeight,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                }
             });
 
             // Handle back/forward button
@@ -381,30 +583,70 @@
                 showPage(currentHash);
             });
 
+            // Main function to show the correct page
             function showPage(pageId) {
-                // First, hide all subpages and set their display to none
                 subpages.forEach(page => {
                     page.classList.remove('active');
                     page.style.display = 'none';
                 });
 
-                // Get the target subpage
                 const targetPage = document.querySelector(pageId);
                 if (targetPage) {
-                    // Update navigation links
                     navLinks.forEach(link => link.classList.remove('active'));
-                    document.querySelector(`nav a[href="${pageId}"]`).classList.add('active');
+                    const mainNavLink = document.querySelector(`nav a[href="${pageId}"]`);
+                    if (mainNavLink) {
+                        mainNavLink.classList.add('active');
+                    } else {
+                        const pastSemestersLink = document.querySelector('nav a[href="#past-semesters"]');
+                        if (pastSemestersLink) {
+                            pastSemestersLink.classList.add('active');
+                        }
+                    }
 
-                    // Set the display of the new page to block, but keep opacity 0
                     targetPage.style.display = 'block';
-
-                    // Use a small timeout to force a browser reflow and then apply the active class
                     setTimeout(() => {
                         targetPage.classList.add('active');
-                        // Set the height of the wrapper to match the content
                         pageWrapper.style.minHeight = targetPage.clientHeight + 'px';
                     }, 10);
+
+                    // Reset scroll position for new pages to start at the top
+                    pageWrapper.scrollTop = 0;
                 }
+            }
+        });
+
+        /* --- Past Semesters Scroll-Spy Logic (using IntersectionObserver) --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            const semester1Content = document.getElementById('semester1-content');
+            const semester2Content = document.getElementById('semester2-content');
+            const navSemester1 = document.getElementById('nav-semester1');
+            const navSemester2 = document.getElementById('nav-semester2');
+
+            // Define options for the observer
+            const options = {
+                root: document.querySelector('.page-wrapper'),
+                rootMargin: '0px 0px -50% 0px', // Trigger when the section is at the midpoint of the container
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.id === 'semester1-content') {
+                            navSemester1.classList.add('active');
+                            navSemester2.classList.remove('active');
+                        } else if (entry.target.id === 'semester2-content') {
+                            navSemester2.classList.add('active');
+                            navSemester1.classList.remove('active');
+                        }
+                    }
+                });
+            }, options);
+
+            // Observe both semester sections
+            if (semester1Content && semester2Content) {
+                observer.observe(semester1Content);
+                observer.observe(semester2Content);
             }
         });
 
@@ -430,8 +672,16 @@
             const steps = [];
             let result = '';
 
+            // Don't use window.alert, use a message box instead
+            function showMessage(message) {
+                const resultBox = document.getElementById('caesar-result');
+                const stepPre = resultBox.querySelector('.step-by-step');
+                stepPre.innerHTML = message;
+                resultBox.style.display = 'block';
+            }
+
             if (isNaN(key) || key < 1 || key > 25) {
-                alert('Please enter a valid key between 1 and 25.');
+                showMessage('Please enter a valid key between 1 and 25.');
                 return;
             }
 
@@ -469,8 +719,16 @@
             const steps = [];
             let result = '';
             
+            // Don't use window.alert, use a message box instead
+            function showMessage(message) {
+                const resultBox = document.getElementById('vigenere-result');
+                const stepPre = resultBox.querySelector('.step-by-step');
+                stepPre.innerHTML = message;
+                resultBox.style.display = 'block';
+            }
+            
             if (!key) {
-                alert('Please enter a valid key.');
+                showMessage('Please enter a valid key.');
                 return;
             }
 
@@ -514,9 +772,17 @@
             const alphabet = getAlphabet();
             const steps = [];
             let result = '';
+            
+            // Don't use window.alert, use a message box instead
+            function showMessage(message) {
+                const resultBox = document.getElementById('vernam-result');
+                const stepPre = resultBox.querySelector('.step-by-step');
+                stepPre.innerHTML = message;
+                resultBox.style.display = 'block';
+            }
 
             if (!key || key.length !== text.length) {
-                alert('The key must be the same length as the text for the Vernam Cipher.');
+                showMessage('The key must be the same length as the text for the Vernam Cipher.');
                 return;
             }
 
