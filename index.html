@@ -181,32 +181,27 @@
             color: var(--accent-blue);
         }
 
-        /* ICT318 specific styling */
-        .cipher-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .cipher-block {
+        /* Module-specific styling */
+        .tool-block, .cipher-block {
             background-color: var(--primary-bg);
             padding: 1.5rem;
             border-radius: 8px;
             border: 1px solid var(--border-color);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 1.5rem;
         }
 
-        .cipher-block:hover {
+        .tool-block:hover, .cipher-block:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
         }
 
-        .cipher-block h3 {
+        .tool-block h3, .cipher-block h3 {
             margin-top: 0;
             color: var(--accent-blue);
         }
 
-        .cipher-form {
+        .tool-form, .cipher-form {
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -222,7 +217,7 @@
             margin-bottom: 0.25rem;
         }
 
-        input[type="text"], textarea {
+        input[type="text"], input[type="number"], textarea, select {
             border: 1px solid var(--border-color);
             padding: 0.75rem;
             border-radius: 4px;
@@ -233,13 +228,14 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus, textarea:focus {
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--accent-blue);
         }
 
-        .radio-group {
+        .radio-group, .button-group {
             display: flex;
+            flex-wrap: wrap;
             gap: 1rem;
         }
 
@@ -275,10 +271,17 @@
         }
 
         .step-by-step {
+            white-space: pre-wrap;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+        
+        .formula {
             font-family: monospace;
             white-space: pre-wrap;
             line-height: 1.4;
             font-size: 0.9rem;
+            margin-bottom: 1rem;
         }
 
         /* Responsive design */
@@ -333,82 +336,79 @@
                 <h2>ICT318 - Network Security</h2>
                 <p>This is the hub for Network Security (ICT318). Below, you can explore and interact with three classic ciphers: Caesar, Vigenère, and Vernam. Use the tools to encipher or decipher text and see the step-by-step solution for each operation.</p>
                 
-                <div class="cipher-container">
+                <div class="cipher-block">
                     <!-- Caesar Cipher -->
-                    <div class="cipher-block">
-                        <h3>Caesar Cipher</h3>
-                        <div class="cipher-form">
-                            <div class="form-row">
-                                <label for="caesar-text">Plaintext / Ciphertext</label>
-                                <textarea id="caesar-text" rows="3" placeholder="Enter text here..."></textarea>
-                            </div>
-                            <div class="form-row">
-                                <label for="caesar-key">Key (1-25)</label>
-                                <input type="number" id="caesar-key" min="1" max="25" value="3">
-                            </div>
-                            <div class="radio-group">
-                                <label><input type="radio" name="caesar-mode" value="encipher" checked> Encipher</label>
-                                <label><input type="radio" name="caesar-mode" value="decipher"> Decipher</label>
-                            </div>
-                            <button onclick="runCaesarCipher()">Run Caesar Cipher</button>
+                    <h3>Caesar Cipher</h3>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="caesar-text">Plaintext / Ciphertext</label>
+                            <textarea id="caesar-text" rows="3" placeholder="Enter text here..."></textarea>
                         </div>
-                        <div id="caesar-result" class="result-box" style="display:none;">
-                            <h4>Result & Steps</h4>
-                            <pre class="step-by-step"></pre>
+                        <div class="form-row">
+                            <label for="caesar-key">Key (1-25)</label>
+                            <input type="number" id="caesar-key" min="1" max="25" value="3">
                         </div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="caesar-mode" value="encipher" checked> Encipher</label>
+                            <label><input type="radio" name="caesar-mode" value="decipher"> Decipher</label>
+                        </div>
+                        <button onclick="runCaesarCipher()">Run Caesar Cipher</button>
                     </div>
-
-                    <!-- Vigenère Cipher -->
-                    <div class="cipher-block">
-                        <h3>Vigenère Cipher</h3>
-                        <div class="cipher-form">
-                            <div class="form-row">
-                                <label for="vigenere-text">Plaintext / Ciphertext</label>
-                                <textarea id="vigenere-text" rows="3" placeholder="Enter text here..."></textarea>
-                            </div>
-                            <div class="form-row">
-                                <label for="vigenere-key">Key (word or phrase)</label>
-                                <input type="text" id="vigenere-key" placeholder="Enter key here...">
-                            </div>
-                            <div class="radio-group">
-                                <label><input type="radio" name="vigenere-mode" value="encipher" checked> Encipher</label>
-                                <label><input type="radio" name="vigenere-mode" value="decipher"> Decipher</label>
-                            </div>
-                            <button onclick="runVigenereCipher()">Run Vigenère Cipher</button>
-                        </div>
-                        <div id="vigenere-result" class="result-box" style="display:none;">
-                            <h4>Result & Steps</h4>
-                            <pre class="step-by-step"></pre>
-                        </div>
+                    <div id="caesar-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
                     </div>
+                </div>
 
-                    <!-- Vernam Cipher -->
-                    <div class="cipher-block">
-                        <h3>Vernam Cipher (One-Time Pad)</h3>
-                        <p style="font-size:0.9rem;">
-                            The key must be the same length as the plaintext/ciphertext.
-                        </p>
-                        <div class="cipher-form">
-                            <div class="form-row">
-                                <label for="vernam-text">Plaintext / Ciphertext</label>
-                                <textarea id="vernam-text" rows="3" placeholder="Enter text here..."></textarea>
-                            </div>
-                            <div class="form-row">
-                                <label for="vernam-key">Key (same length as text)</label>
-                                <input type="text" id="vernam-key" placeholder="Enter key here...">
-                            </div>
-                            <div class="radio-group">
-                                <label><input type="radio" name="vernam-mode" value="encipher" checked> Encipher</label>
-                                <label><input type="radio" name="vernam-mode" value="decipher"> Decipher</label>
-                            </div>
-                            <button onclick="runVernamCipher()">Run Vernam Cipher</button>
+                <!-- Vigenère Cipher -->
+                <div class="cipher-block">
+                    <h3>Vigenère Cipher</h3>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="vigenere-text">Plaintext / Ciphertext</label>
+                            <textarea id="vigenere-text" rows="3" placeholder="Enter text here..."></textarea>
                         </div>
-                        <div id="vernam-result" class="result-box" style="display:none;">
-                            <h4>Result & Steps</h4>
-                            <pre class="step-by-step"></pre>
+                        <div class="form-row">
+                            <label for="vigenere-key">Key (word or phrase)</label>
+                            <input type="text" id="vigenere-key" placeholder="Enter key here...">
                         </div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="vigenere-mode" value="encipher" checked> Encipher</label>
+                            <label><input type="radio" name="vigenere-mode" value="decipher"> Decipher</label>
+                        </div>
+                        <button onclick="runVigenereCipher()">Run Vigenère Cipher</button>
                     </div>
+                    <div id="vigenere-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
 
+                <!-- Vernam Cipher -->
+                <div class="cipher-block">
+                    <h3>Vernam Cipher (One-Time Pad)</h3>
+                    <p style="font-size:0.9rem;">
+                        The key must be the same length as the plaintext/ciphertext.
+                    </p>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="vernam-text">Plaintext / Ciphertext</label>
+                            <textarea id="vernam-text" rows="3" placeholder="Enter text here..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label for="vernam-key">Key (same length as text)</label>
+                            <input type="text" id="vernam-key" placeholder="Enter key here...">
+                        </div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="vernam-mode" value="encipher" checked> Encipher</label>
+                            <label><input type="radio" name="vernam-mode" value="decipher"> Decipher</label>
+                        </div>
+                        <button onclick="runVernamCipher()">Run Vernam Cipher</button>
+                    </div>
+                    <div id="vernam-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
                 </div>
             </div>
 
@@ -416,8 +416,8 @@
             <div id="past-semesters" class="subpage">
                 <h2>Past Semesters</h2>
                 <div class="sub-nav">
-                    <a href="#semester1-content" id="nav-semester1" class="active">Semester 1</a>
-                    <a href="#semester2-content" id="nav-semester2">Semester 2</a>
+                    <a href="#semester1-heading" id="nav-semester1" class="active">Semester 1</a>
+                    <a href="#semester2-heading" id="nav-semester2">Semester 2</a>
                 </div>
                 
                 <div id="semester1-content">
@@ -485,8 +485,72 @@
             </div>
             <div id="ict114" class="subpage">
                 <h2>ICT114 - Computer Architecture</h2>
-                <p>This page is a placeholder for projects and details related to **ICT114**. Here I explored how hardware components and software interact, learning about the inner workings of a computer system. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>An exploration of the structure and function of computer systems, including hardware components, memory organization, and data representation.</p>
+                
+                <div class="tool-block">
+                    <h3>Storage Formula Calculator</h3>
+                    <p>Use this tool to calculate various storage performance metrics. Simply fill in the parameters and click a button to see the result!</p>
+                    <div class="tool-form">
+                        <div class="form-row">
+                            <label for="si-unit">Resultant SI Unit:</label>
+                            <select id="si-unit">
+                                <option value="s">s</option>
+                                <option value="ms" selected>ms</option>
+                                <option value="us">μs</option>
+                                <option value="ns">ns</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label for="hth-time">Head-To-Head Switching Time:</label>
+                            <input type="text" id="hth-time" placeholder="e.g., 5us" value="5us">
+                        </div>
+                        <div class="form-row">
+                            <label for="platters-count">Number of Platters:</label>
+                            <input type="number" id="platters-count" value="4">
+                        </div>
+                        <div class="form-row">
+                            <label for="ttt-time">Track-To-Track Seek Time:</label>
+                            <input type="text" id="ttt-time" placeholder="e.g., 5ms" value="5ms">
+                        </div>
+                        <div class="form-row">
+                            <label for="tracks-count">Number of Tracks/Platter Side:</label>
+                            <input type="number" id="tracks-count" value="1000">
+                        </div>
+                        <div class="form-row">
+                            <label for="rpm-speed">RPM:</label>
+                            <input type="number" id="rpm-speed" value="12000">
+                        </div>
+                        <div class="form-row">
+                            <label for="sectors-per-track">Sectors/Track:</label>
+                            <input type="number" id="sectors-per-track" value="2048">
+                        </div>
+                        <div class="form-row">
+                            <label for="bytes-per-sector">Bytes/Sector:</label>
+                            <input type="number" id="bytes-per-sector" value="512">
+                        </div>
+                        <div class="form-row">
+                            <label for="data-si-unit">Data SI Unit (for transfer rates):</label>
+                            <select id="data-si-unit">
+                                <option value="B">B</option>
+                                <option value="K">KB</option>
+                                <option value="M" selected>MB</option>
+                                <option value="G">GB</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="button-group" style="margin-top: 1rem;">
+                        <button onclick="calculateAad()">Average Access Delay</button>
+                        <button onclick="calculateSat()">Sequential Access Time</button>
+                        <button onclick="calculateAat()">Average Access Time</button>
+                        <button onclick="calculateMaxTransfer()">Max Data Transfer</button>
+                        <button onclick="calculateSustainedTransfer()">Sustained Data Transfer</button>
+                    </div>
+                    <div id="tool-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="formula"></pre>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
             </div>
             <div id="ict133" class="subpage">
                 <h2>ICT133 - Structured Programming</h2>
@@ -500,7 +564,7 @@
             </div>
             <div id="sst101" class="subpage">
                 <h2>SST101 - Project Management</h2>
-                <p>This page is a placeholder for projects and details related to **SST101**. I gained valuable skills in planning, executing, and closing projects effectively. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
+                <p>This course covered the methodologies and practices of effective project management, from planning to execution and closure.</p>
                 <p>Come back later to see more! ✨</p>
             </div>
             <div id="nco205" class="subpage">
@@ -617,8 +681,8 @@
 
         /* --- Past Semesters Scroll-Spy Logic (using IntersectionObserver) --- */
         document.addEventListener('DOMContentLoaded', () => {
-            const semester1Content = document.getElementById('semester1-content');
-            const semester2Content = document.getElementById('semester2-content');
+            const semester1Heading = document.getElementById('semester1-heading');
+            const semester2Heading = document.getElementById('semester2-heading');
             const navSemester1 = document.getElementById('nav-semester1');
             const navSemester2 = document.getElementById('nav-semester2');
 
@@ -632,10 +696,10 @@
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        if (entry.target.id === 'semester1-content') {
+                        if (entry.target.id === 'semester1-heading') {
                             navSemester1.classList.add('active');
                             navSemester2.classList.remove('active');
-                        } else if (entry.target.id === 'semester2-content') {
+                        } else if (entry.target.id === 'semester2-heading') {
                             navSemester2.classList.add('active');
                             navSemester1.classList.remove('active');
                         }
@@ -643,10 +707,10 @@
                 });
             }, options);
 
-            // Observe both semester sections
-            if (semester1Content && semester2Content) {
-                observer.observe(semester1Content);
-                observer.observe(semester2Content);
+            // Observe both semester headings
+            if (semester1Heading && semester2Heading) {
+                observer.observe(semester1Heading);
+                observer.observe(semester2Heading);
             }
         });
 
@@ -815,6 +879,204 @@
             }
             
             displayResult(result, steps, 'vernam-result');
+        }
+        
+        /* --- Storage Formula Calculator Logic (New) --- */
+        
+        const conversionFactors = ['s', 'ms', 'us', 'ns'];
+        const dataConversionFactors = ["B", "K", "M", "G"];
+        const conversionMultipliers = [1, 1e3, 1e6, 1e9]; // s, ms, us, ns
+        const dataConversionMultipliers = [1, 1024, 1024**2, 1024**3]; // B, KB, MB, GB
+
+        // Helper to display results in the tool-result box
+        function displayToolResult(title, formula, steps, finalResult, finalUnit) {
+            const resultBox = document.getElementById('tool-result');
+            const formulaPre = resultBox.querySelector('.formula');
+            const stepPre = resultBox.querySelector('.step-by-step');
+            
+            formulaPre.textContent = `Formula:\n${formula}`;
+            stepPre.innerHTML = 
+`--- Step-by-Step Breakdown ---
+${steps.join('\n')}
+
+Final Result: ${finalResult} ${finalUnit}`;
+            resultBox.style.display = 'block';
+        }
+
+        // Helper to convert a value from a given unit to seconds
+        function convertToSeconds(valueStr) {
+            const match = valueStr.match(/^([\d.]+)\s*([a-zA-Zμ]+)$/);
+            if (!match) {
+                return null;
+            }
+            const value = parseFloat(match[1]);
+            const unit = match[2];
+            let multiplier = 1;
+            switch(unit) {
+                case 's': multiplier = 1; break;
+                case 'ms': multiplier = 1e-3; break;
+                case 'us':
+                case 'μs': multiplier = 1e-6; break;
+                case 'ns': multiplier = 1e-9; break;
+                default: return null;
+            }
+            return value * multiplier;
+        }
+
+        // Helper to convert a value from seconds to the desired output unit
+        function convertFromSeconds(valueSeconds, targetUnit) {
+            const index = conversionFactors.indexOf(targetUnit);
+            if (index === -1) return valueSeconds;
+            return valueSeconds * conversionMultipliers[index];
+        }
+
+        // Helper to get all input values
+        function getInputs() {
+            return {
+                siUnit: document.getElementById('si-unit').value,
+                hthTime: document.getElementById('hth-time').value,
+                platters: parseFloat(document.getElementById('platters-count').value),
+                tttTime: document.getElementById('ttt-time').value,
+                tracks: parseFloat(document.getElementById('tracks-count').value),
+                rpm: parseFloat(document.getElementById('rpm-speed').value),
+                sectorsPerTrack: parseFloat(document.getElementById('sectors-per-track').value),
+                bytesPerSector: parseFloat(document.getElementById('bytes-per-sector').value),
+                dataSiUnit: document.getElementById('data-si-unit').value
+            };
+        }
+
+        // 1. Average Access Delay
+        function calculateAad() {
+            const { siUnit, hthTime, platters, tttTime, tracks, rpm } = getInputs();
+            const steps = [];
+
+            // Convert inputs to seconds
+            const hthSeconds = convertToSeconds(hthTime);
+            const tttSeconds = convertToSeconds(tttTime);
+            if (hthSeconds === null || tttSeconds === null) {
+                const resultBox = document.getElementById('tool-result');
+                resultBox.querySelector('.step-by-step').innerHTML = 'Invalid format for HTH or TTT. Use format "5us" or "1.2ms".';
+                resultBox.style.display = 'block';
+                return;
+            }
+            
+            // Calculate components
+            const recordingSurfaces = platters * 2;
+            const headToHeadDelay = hthSeconds * (recordingSurfaces / 2);
+            const trackToTrackDelay = (tracks / 2) * tttSeconds;
+            const rotationalDelay = (60 / rpm) / 2;
+            
+            const totalDelaySeconds = headToHeadDelay + trackToTrackDelay + rotationalDelay;
+            const totalDelaySi = convertFromSeconds(totalDelaySeconds, siUnit);
+
+            // Build steps
+            steps.push(`- Head-To-Head Delay: (${hthSeconds}s × ${recordingSurfaces} / 2) = ${headToHeadDelay.toFixed(8)}s`);
+            steps.push(`- Track-To-Track Seek: (${tracks} / 2 × ${tttSeconds}s) = ${trackToTrackDelay.toFixed(8)}s`);
+            steps.push(`- Average Rotational Delay: (60s / ${rpm} / 2) = ${rotationalDelay.toFixed(8)}s`);
+            steps.push(`- Total in seconds: ${headToHeadDelay.toFixed(8)}s + ${trackToTrackDelay.toFixed(8)}s + ${rotationalDelay.toFixed(8)}s = ${totalDelaySeconds.toFixed(8)}s`);
+            steps.push(`- Final conversion to ${siUnit}: ${totalDelaySeconds.toFixed(8)}s × ${conversionMultipliers[conversionFactors.indexOf(siUnit)]} = ${totalDelaySi.toFixed(8)}${siUnit}`);
+
+            // Formula
+            const formula = `Average Access Delay = (HTH × Platters/2) + (Tracks/2 × TTT) + (60s/RPM ÷ 2)`;
+
+            displayToolResult("Average Access Delay", formula, steps, totalDelaySi.toFixed(8), siUnit);
+        }
+
+        // 2. Sequential Access Time
+        function calculateSat() {
+            const { siUnit, rpm, sectorsPerTrack } = getInputs();
+            const steps = [];
+
+            const timePerSectorSeconds = (60 / rpm) / sectorsPerTrack;
+            const timePerSectorSi = convertFromSeconds(timePerSectorSeconds, siUnit);
+            
+            steps.push(`- Time per rotation: 60s / ${rpm} = ${(60/rpm).toFixed(8)}s`);
+            steps.push(`- Time per sector: ${(60/rpm).toFixed(8)}s / ${sectorsPerTrack} = ${timePerSectorSeconds.toFixed(8)}s`);
+            steps.push(`- Final conversion to ${siUnit}: ${timePerSectorSeconds.toFixed(8)}s × ${conversionMultipliers[conversionFactors.indexOf(siUnit)]} = ${timePerSectorSi.toFixed(8)}${siUnit}`);
+
+            const formula = `Sequential Access Time = 60s / (RPM × Sectors/Track)`;
+
+            displayToolResult("Sequential Access Time", formula, steps, timePerSectorSi.toFixed(8), siUnit);
+        }
+
+        // 3. Average Access Time
+        function calculateAat() {
+            const { siUnit, hthTime, platters, tttTime, tracks, rpm, sectorsPerTrack } = getInputs();
+            const steps = [];
+
+            // Calculate components in seconds
+            const hthSeconds = convertToSeconds(hthTime);
+            const tttSeconds = convertToSeconds(tttTime);
+            const recordingSurfaces = platters * 2;
+            const headToHeadDelay = hthSeconds * (recordingSurfaces / 2);
+            const trackToTrackDelay = (tracks / 2) * tttSeconds;
+            const rotationalDelay = (60 / rpm) / 2;
+            const aadSeconds = headToHeadDelay + trackToTrackDelay + rotationalDelay;
+            const timePerSectorSeconds = (60 / rpm) / sectorsPerTrack;
+
+            const aatSeconds = aadSeconds + timePerSectorSeconds;
+            const aatSi = convertFromSeconds(aatSeconds, siUnit);
+
+            steps.push(`- Average Access Delay (AAD): ${aadSeconds.toFixed(8)}s`);
+            steps.push(`- Time to Read One Sector: ${timePerSectorSeconds.toFixed(8)}s`);
+            steps.push(`- Total in seconds: ${aadSeconds.toFixed(8)}s + ${timePerSectorSeconds.toFixed(8)}s = ${aatSeconds.toFixed(8)}s`);
+            steps.push(`- Final conversion to ${siUnit}: ${aatSeconds.toFixed(8)}s × ${conversionMultipliers[conversionFactors.indexOf(siUnit)]} = ${aatSi.toFixed(8)}${siUnit}`);
+
+            const formula = `Average Access Time = AAD + Sequential Access Time`;
+
+            displayToolResult("Average Access Time", formula, steps, aatSi.toFixed(8), siUnit);
+        }
+
+        // 4. Maximum Data Transfer
+        function calculateMaxTransfer() {
+            const { sectorsPerTrack, rpm, bytesPerSector, dataSiUnit } = getInputs();
+            const steps = [];
+
+            const timePerSectorSeconds = (60 / rpm) / sectorsPerTrack;
+            const sectorsPerSecond = 1 / timePerSectorSeconds;
+            const bytesPerSecond = sectorsPerSecond * bytesPerSector;
+
+            const dataSiIndex = dataConversionFactors.indexOf(dataSiUnit);
+            const finalData = bytesPerSecond / dataConversionMultipliers[dataSiIndex];
+
+            steps.push(`- Sectors per second: 1 / ${timePerSectorSeconds.toFixed(8)} = ${sectorsPerSecond.toFixed(2)} sectors/s`);
+            steps.push(`- Bytes per second: ${sectorsPerSecond.toFixed(2)} sectors/s × ${bytesPerSector} B/sector = ${bytesPerSecond.toFixed(2)}B/s`);
+            steps.push(`- Final conversion to ${dataSiUnit}: ${bytesPerSecond.toFixed(2)}B/s / ${dataConversionMultipliers[dataSiIndex]} = ${finalData.toFixed(2)}${dataSiUnit}B/s`);
+
+            const formula = `Maximum Data Transfer Rate = (1 / Sequential Access Time) × Bytes/Sector`;
+
+            displayToolResult("Maximum Data Transfer Rate", formula, steps, finalData.toFixed(2), `${dataSiUnit}B/s`);
+        }
+
+        // 5. Sustained Data Transfer
+        function calculateSustainedTransfer() {
+            const { hthTime, platters, tttTime, tracks, rpm, sectorsPerTrack, bytesPerSector, dataSiUnit } = getInputs();
+            const steps = [];
+
+            const hthSeconds = convertToSeconds(hthTime);
+            const tttSeconds = convertToSeconds(tttTime);
+            const recordingSurfaces = platters * 2;
+            const headToHeadDelay = hthSeconds * (recordingSurfaces / 2);
+            const trackToTrackDelay = (tracks / 2) * tttSeconds;
+            const rotationalDelay = (60 / rpm) / 2;
+            const aadSeconds = headToHeadDelay + trackToTrackDelay + rotationalDelay;
+            const timePerSectorSeconds = (60 / rpm) / sectorsPerTrack;
+            const aatSeconds = aadSeconds + timePerSectorSeconds;
+
+            const sectorsPerSecond = 1 / aatSeconds;
+            const bytesPerSecond = sectorsPerSecond * bytesPerSector;
+            
+            const dataSiIndex = dataConversionFactors.indexOf(dataSiUnit);
+            const finalData = bytesPerSecond / dataConversionMultipliers[dataSiIndex];
+
+            steps.push(`- Average Access Time (AAT): ${aatSeconds.toFixed(8)}s`);
+            steps.push(`- Sectors per second: 1 / ${aatSeconds.toFixed(8)} = ${sectorsPerSecond.toFixed(2)} sectors/s`);
+            steps.push(`- Bytes per second: ${sectorsPerSecond.toFixed(2)} sectors/s × ${bytesPerSector} B/sector = ${bytesPerSecond.toFixed(2)}B/s`);
+            steps.push(`- Final conversion to ${dataSiUnit}: ${bytesPerSecond.toFixed(2)}B/s / ${dataConversionMultipliers[dataSiIndex]} = ${finalData.toFixed(2)}${dataSiUnit}B/s`);
+
+            const formula = `Sustained Data Transfer Rate = (1 / Average Access Time) × Bytes/Sector`;
+
+            displayToolResult("Sustained Data Transfer Rate", formula, steps, finalData.toFixed(2), `${dataSiUnit}B/s`);
         }
     </script>
 
