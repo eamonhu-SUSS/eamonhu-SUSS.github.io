@@ -105,6 +105,11 @@
             padding: 2rem;
             max-height: calc(100vh - 200px);
         }
+        
+        /* Ensure the sub-nav has enough space when sticky */
+        .page-wrapper.scrolled {
+            padding-top: 5rem; /* Add padding to prevent content from hiding behind the sticky nav */
+        }
 
         /* General content styling */
         h2 {
@@ -115,6 +120,10 @@
             margin-bottom: 1rem;
         }
         
+        #past-semesters h2 {
+            margin-bottom: 0;
+        }
+
         h3 {
             font-size: 1.2rem;
             color: var(--accent-blue-dark);
@@ -131,15 +140,15 @@
             display: flex;
             justify-content: flex-start;
             gap: 1rem;
-            margin: -2rem -2rem 2rem -2rem; /* Pull into padding to align with container */
+            margin: 0 -2rem 2rem -2rem; /* remove the extra top margin */
             padding: 1rem 2rem;
             background-color: var(--secondary-bg);
             border-bottom: 1px solid var(--border-color);
-            position: sticky; /* Make the sub-nav bar sticky */
-            top: 0; /* Stick to the top of the container */
+            position: sticky;
+            top: -32px; /* equal to the height of the main nav bar */
             z-index: 10;
         }
-
+        
         .sub-nav a {
             padding: 0.5rem 1rem;
             border-radius: 6px;
@@ -606,128 +615,168 @@
     </div>
 
     <script>
-        // JavaScript for page navigation and cipher logic
-        
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Element Selectors ---
             const navLinks = document.querySelectorAll('nav a');
             const subpages = document.querySelectorAll('.subpage');
             const pageWrapper = document.querySelector('.page-wrapper');
-            
-            // Find the active page on load and show it
-            const initialHash = window.location.hash || '#eng335';
-            showPage(initialHash);
 
-            // Handle all navigation clicks
-            document.addEventListener('click', (e) => {
-                const link = e.target.closest('a');
-                if (link && link.getAttribute('href').startsWith('#')) {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href');
-                    
-                    // If the link is for "Past Semesters" or a module, update the URL
-                    if (document.querySelector(targetId).classList.contains('subpage')) {
-                        history.pushState(null, '', targetId);
-                        showPage(targetId);
-                    } else {
-                        // For sub-nav links within "Past Semesters", just scroll
-                        const targetElement = document.querySelector(targetId);
-                        if (targetElement) {
-                            pageWrapper.scrollTo({
-                                top: targetElement.offsetTop - document.querySelector('.sub-nav').offsetHeight,
-                                behavior: 'smooth'
-                            });
-                        }
-                    }
+            // --- State Management ---
+            // A variable to hold the "cleanup" function for our scroll listener.
+            // This ensures we don't have multiple listeners running when we switch pages.
+            let removePastSemestersListener = null;
+
+            // --- Core Functions ---
+
+            /**
+             * Shows a specific subpage based on its ID (e.g., '#eng335')
+             * and handles the setup/teardown of page-specific logic.
+             * @param {string} pageId The ID of the page to show.
+             */
+            const showPage = (pageId) => {
+                // 1. Clean up from the previous page. If a scroll listener for 'Past Semesters' exists, remove it.
+                if (removePastSemestersListener) {
+                    removePastSemestersListener();
+                    removePastSemestersListener = null;
                 }
-            });
 
-            // Handle back/forward button
-            window.addEventListener('popstate', () => {
-                const currentHash = window.location.hash || '#eng335';
-                showPage(currentHash);
-            });
-
-            // Main function to show the correct page
-            function showPage(pageId) {
+                // 2. Hide all pages and deactivate all main navigation links.
                 subpages.forEach(page => {
                     page.classList.remove('active');
                     page.style.display = 'none';
                 });
+                navLinks.forEach(link => link.classList.remove('active'));
 
+                // 3. Find the target page to display.
                 const targetPage = document.querySelector(pageId);
-                if (targetPage) {
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    const mainNavLink = document.querySelector(`nav a[href="${pageId}"]`);
-                    if (mainNavLink) {
-                        mainNavLink.classList.add('active');
-                    } else {
-                        const pastSemestersLink = document.querySelector('nav a[href="#past-semesters"]');
-                        if (pastSemestersLink) {
-                            pastSemestersLink.classList.add('active');
-                        }
-                    }
-
-                    targetPage.style.display = 'block';
-                    setTimeout(() => {
-                        targetPage.classList.add('active');
-                        pageWrapper.style.minHeight = targetPage.clientHeight + 'px';
-                    }, 10);
-
-                    // Reset scroll position for new pages to start at the top
-                    pageWrapper.scrollTop = 0;
+                if (!targetPage) {
+                    // Fallback to the first page if the hash is invalid.
+                    showPage(navLinks[0].getAttribute('href'));
+                    return;
                 }
-            }
-        });
 
-        /* --- Past Semesters Scroll-Spy Logic (using IntersectionObserver) --- */
-        document.addEventListener('DOMContentLoaded', () => {
-            const semester1Heading = document.getElementById('semester1-heading');
-            const semester2Heading = document.getElementById('semester2-heading');
-            const navSemester1 = document.getElementById('nav-semester1');
-            const navSemester2 = document.getElementById('nav-semester2');
+                // 4. Activate the correct main navigation link.
+                const mainNavLink = document.querySelector(`nav a[href="${pageId}"]`);
+                if (mainNavLink) {
+                    mainNavLink.classList.add('active');
+                } else {
+                    // This handles individual module pages, activating the 'Past Semesters' tab as their parent.
+                    const pastSemestersLink = document.querySelector('nav a[href="#past-semesters"]');
+                    if (pastSemestersLink) pastSemestersLink.classList.add('active');
+                }
 
-            // Define options for the observer
-            const options = {
-                root: document.querySelector('.page-wrapper'),
-                rootMargin: '0px 0px -50% 0px', // Trigger when the section is at the midpoint of the container
-                threshold: 0
+                // 5. Show the page with a fade-in effect.
+                targetPage.style.display = 'block';
+                setTimeout(() => {
+                    targetPage.classList.add('active');
+                    pageWrapper.scrollTop = 0; // Reset scroll position for the new page.
+
+                    // 6. If this is the 'Past Semesters' page, set up its special scroll-aware navigation.
+                    if (pageId === '#past-semesters') {
+                        removePastSemestersListener = setupPastSemestersScrollListener();
+                    }
+                }, 10); // A tiny delay allows the CSS transition to work correctly.
             };
 
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        if (entry.target.id === 'semester1-heading') {
-                            navSemester1.classList.add('active');
-                            navSemester2.classList.remove('active');
-                        } else if (entry.target.id === 'semester2-heading') {
-                            navSemester2.classList.add('active');
-                            navSemester1.classList.remove('active');
-                        }
-                    }
-                });
-            }, options);
+            /**
+             * Sets up a scroll event listener for the 'Past Semesters' page.
+             * This function highlights the sub-nav link ('Semester 1' or 'Semester 2')
+             * based on the user's scroll position.
+             * @returns {Function} A cleanup function to remove the event listener.
+             */
+            const setupPastSemestersScrollListener = () => {
+                const subNav = document.querySelector('#past-semesters .sub-nav');
+                const s1Link = document.getElementById('nav-semester1');
+                const s2Link = document.getElementById('nav-semester2');
+                const s1Heading = document.getElementById('semester1-heading');
+                const s2Heading = document.getElementById('semester2-heading');
 
-            // Observe both semester headings
-            if (semester1Heading && semester2Heading) {
-                observer.observe(semester1Heading);
-                observer.observe(semester2Heading);
-            }
+                if (!subNav || !s1Link || !s2Link || !s1Heading || !s2Heading) {
+                    console.error("Required elements for Past Semesters scroll listener not found.");
+                    return () => {}; // Return an empty cleanup function if setup fails.
+                }
+
+                const handleScroll = () => {
+                    // Determine the "trigger line". When a heading crosses this line, the active link changes.
+                    // It's the top of the scrollable area plus the height of the sticky sub-nav.
+                    const scrollTriggerPosition = pageWrapper.scrollTop + subNav.offsetHeight;
+                    const s1Top = s1Heading.offsetTop;
+                    const s2Top = s2Heading.offsetTop;
+
+                    // Logic to set the active link based on which heading is currently visible.
+                    if (scrollTriggerPosition >= s2Top) {
+                        s2Link.classList.add('active');
+                        s1Link.classList.remove('active');
+                    } else if (scrollTriggerPosition >= s1Top) {
+                        s1Link.classList.add('active');
+                        s2Link.classList.remove('active');
+                    } else {
+                        // Default to Semester 1 if scrolled above its heading.
+                        s1Link.classList.add('active');
+                        s2Link.classList.remove('active');
+                    }
+                };
+
+                handleScroll(); // Run once on setup to set the initial state correctly.
+                pageWrapper.addEventListener('scroll', handleScroll);
+
+                // Return a "cleanup" function to be called when we navigate away from this page.
+                return () => pageWrapper.removeEventListener('scroll', handleScroll);
+            };
+
+            // --- Event Listeners Setup ---
+
+            // Main navigation click handler.
+            document.querySelector('nav').addEventListener('click', (e) => {
+                if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = e.target.getAttribute('href');
+                    history.pushState(null, '', targetId); // Update URL without full reload.
+                    showPage(targetId);
+                }
+            });
+            
+            // 'Past Semesters' sub-navigation click handler for smooth scrolling.
+            document.querySelector('.sub-nav').addEventListener('click', (e) => {
+                if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    const targetId = e.target.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    const subNav = e.target.closest('.sub-nav');
+
+                    if (targetElement && subNav) {
+                        // Calculate where to scroll, accounting for the sticky sub-nav's height.
+                        const topPos = targetElement.offsetTop - subNav.offsetHeight;
+                        pageWrapper.scrollTo({
+                            top: topPos,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+
+            // Handle browser back/forward button clicks.
+            window.addEventListener('popstate', () => {
+                const currentHash = window.location.hash || navLinks[0].getAttribute('href');
+                showPage(currentHash);
+            });
+
+            // --- Initial Page Load ---
+            const initialHash = window.location.hash || navLinks[0].getAttribute('href');
+            showPage(initialHash);
         });
 
-        /* --- Cipher Functions --- */
+        /* --- Cipher Functions (Unchanged) --- */
 
         const getAlphabet = () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-        // Helper function to format the result and steps
         function displayResult(result, steps, elementId) {
             const resultBox = document.getElementById(elementId);
             const stepPre = resultBox.querySelector('.step-by-step');
-            
             stepPre.innerHTML = `Final Result: ${result}\n\n--- Step-by-Step Breakdown ---\n${steps.join('\n')}`;
             resultBox.style.display = 'block';
         }
 
-        // --- Caesar Cipher Logic ---
         function runCaesarCipher() {
             const text = document.getElementById('caesar-text').value.toUpperCase();
             let key = parseInt(document.getElementById('caesar-key').value, 10);
@@ -736,7 +785,6 @@
             const steps = [];
             let result = '';
 
-            // Don't use window.alert, use a message box instead
             function showMessage(message) {
                 const resultBox = document.getElementById('caesar-result');
                 const stepPre = resultBox.querySelector('.step-by-step');
@@ -750,7 +798,7 @@
             }
 
             if (mode === 'decipher') {
-                key = (26 - key) % 26; // For decryption, we shift backwards
+                key = (26 - key) % 26;
             }
             
             for (let i = 0; i < text.length; i++) {
@@ -760,7 +808,6 @@
                     const newIndex = (originalIndex + key) % 26;
                     const newChar = alphabet[newIndex];
                     result += newChar;
-
                     steps.push(`- ${mode === 'encipher' ? 'Plaintext' : 'Ciphertext'} character: ${char} (${originalIndex})`);
                     steps.push(`  Shift: ${mode === 'encipher' ? '' : '-'} ${document.getElementById('caesar-key').value}`);
                     steps.push(`  Calculation: (${originalIndex} + ${mode === 'encipher' ? key : (26-key)}) mod 26 = ${newIndex}`);
@@ -774,7 +821,6 @@
             displayResult(result, steps, 'caesar-result');
         }
 
-        // --- Vigenère Cipher Logic ---
         function runVigenereCipher() {
             const text = document.getElementById('vigenere-text').value.toUpperCase();
             let key = document.getElementById('vigenere-key').value.toUpperCase();
@@ -783,7 +829,6 @@
             const steps = [];
             let result = '';
             
-            // Don't use window.alert, use a message box instead
             function showMessage(message) {
                 const resultBox = document.getElementById('vigenere-result');
                 const stepPre = resultBox.querySelector('.step-by-step');
@@ -809,7 +854,7 @@
                         newIndex = (charIndex + keyIndexVal) % 26;
                         steps.push(`- Plaintext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndexVal})`);
                         steps.push(`  Calculation: (${charIndex} + ${keyIndexVal}) mod 26 = ${newIndex}`);
-                    } else { // decipher
+                    } else {
                         newIndex = (charIndex - keyIndexVal + 26) % 26;
                         steps.push(`- Ciphertext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndexVal})`);
                         steps.push(`  Calculation: (${charIndex} - ${keyIndexVal} + 26) mod 26 = ${newIndex}`);
@@ -828,7 +873,6 @@
             displayResult(result, steps, 'vigenere-result');
         }
 
-        // --- Vernam Cipher Logic (One-Time Pad) ---
         function runVernamCipher() {
             const text = document.getElementById('vernam-text').value.toUpperCase();
             const key = document.getElementById('vernam-key').value.toUpperCase();
@@ -837,7 +881,6 @@
             const steps = [];
             let result = '';
             
-            // Don't use window.alert, use a message box instead
             function showMessage(message) {
                 const resultBox = document.getElementById('vernam-result');
                 const stepPre = resultBox.querySelector('.step-by-step');
@@ -863,7 +906,7 @@
                         newIndex = (charIndex + keyIndex) % 26;
                         steps.push(`- Plaintext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndex})`);
                         steps.push(`  Calculation: (${charIndex} + ${keyIndex}) mod 26 = ${newIndex}`);
-                    } else { // decipher
+                    } else {
                         newIndex = (charIndex - keyIndex + 26) % 26;
                         steps.push(`- Ciphertext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndex})`);
                         steps.push(`  Calculation: (${charIndex} - ${keyIndex} + 26) mod 26 = ${newIndex}`);
@@ -881,56 +924,44 @@
             displayResult(result, steps, 'vernam-result');
         }
         
-        /* --- Storage Formula Calculator Logic (New) --- */
+        /* --- Storage Formula Calculator Logic (Unchanged) --- */
         
         const conversionFactors = ['s', 'ms', 'us', 'ns'];
         const dataConversionFactors = ["B", "K", "M", "G"];
-        const conversionMultipliers = [1, 1e3, 1e6, 1e9]; // s, ms, us, ns
-        const dataConversionMultipliers = [1, 1024, 1024**2, 1024**3]; // B, KB, MB, GB
+        const conversionMultipliers = [1, 1e3, 1e6, 1e9];
+        const dataConversionMultipliers = [1, 1024, 1024**2, 1024**3];
 
-        // Helper to display results in the tool-result box
         function displayToolResult(title, formula, steps, finalResult, finalUnit) {
             const resultBox = document.getElementById('tool-result');
             const formulaPre = resultBox.querySelector('.formula');
             const stepPre = resultBox.querySelector('.step-by-step');
-            
             formulaPre.textContent = `Formula:\n${formula}`;
-            stepPre.innerHTML = 
-`--- Step-by-Step Breakdown ---
-${steps.join('\n')}
-
-Final Result: ${finalResult} ${finalUnit}`;
+            stepPre.innerHTML = `--- Step-by-Step Breakdown ---\n${steps.join('\n')}\n\nFinal Result: ${finalResult} ${finalUnit}`;
             resultBox.style.display = 'block';
         }
 
-        // Helper to convert a value from a given unit to seconds
         function convertToSeconds(valueStr) {
             const match = valueStr.match(/^([\d.]+)\s*([a-zA-Zμ]+)$/);
-            if (!match) {
-                return null;
-            }
+            if (!match) return null;
             const value = parseFloat(match[1]);
             const unit = match[2];
             let multiplier = 1;
             switch(unit) {
                 case 's': multiplier = 1; break;
                 case 'ms': multiplier = 1e-3; break;
-                case 'us':
-                case 'μs': multiplier = 1e-6; break;
+                case 'us': case 'μs': multiplier = 1e-6; break;
                 case 'ns': multiplier = 1e-9; break;
                 default: return null;
             }
             return value * multiplier;
         }
 
-        // Helper to convert a value from seconds to the desired output unit
         function convertFromSeconds(valueSeconds, targetUnit) {
             const index = conversionFactors.indexOf(targetUnit);
             if (index === -1) return valueSeconds;
             return valueSeconds * conversionMultipliers[index];
         }
 
-        // Helper to get all input values
         function getInputs() {
             return {
                 siUnit: document.getElementById('si-unit').value,
@@ -945,12 +976,9 @@ Final Result: ${finalResult} ${finalUnit}`;
             };
         }
 
-        // 1. Average Access Delay
         function calculateAad() {
             const { siUnit, hthTime, platters, tttTime, tracks, rpm } = getInputs();
             const steps = [];
-
-            // Convert inputs to seconds
             const hthSeconds = convertToSeconds(hthTime);
             const tttSeconds = convertToSeconds(tttTime);
             if (hthSeconds === null || tttSeconds === null) {
@@ -959,52 +987,36 @@ Final Result: ${finalResult} ${finalUnit}`;
                 resultBox.style.display = 'block';
                 return;
             }
-            
-            // Calculate components
             const recordingSurfaces = platters * 2;
             const headToHeadDelay = hthSeconds * (recordingSurfaces / 2);
             const trackToTrackDelay = (tracks / 2) * tttSeconds;
             const rotationalDelay = (60 / rpm) / 2;
-            
             const totalDelaySeconds = headToHeadDelay + trackToTrackDelay + rotationalDelay;
             const totalDelaySi = convertFromSeconds(totalDelaySeconds, siUnit);
-
-            // Build steps
             steps.push(`- Head-To-Head Delay: (${hthSeconds}s × ${recordingSurfaces} / 2) = ${headToHeadDelay.toFixed(8)}s`);
             steps.push(`- Track-To-Track Seek: (${tracks} / 2 × ${tttSeconds}s) = ${trackToTrackDelay.toFixed(8)}s`);
             steps.push(`- Average Rotational Delay: (60s / ${rpm} / 2) = ${rotationalDelay.toFixed(8)}s`);
             steps.push(`- Total in seconds: ${headToHeadDelay.toFixed(8)}s + ${trackToTrackDelay.toFixed(8)}s + ${rotationalDelay.toFixed(8)}s = ${totalDelaySeconds.toFixed(8)}s`);
             steps.push(`- Final conversion to ${siUnit}: ${totalDelaySeconds.toFixed(8)}s × ${conversionMultipliers[conversionFactors.indexOf(siUnit)]} = ${totalDelaySi.toFixed(8)}${siUnit}`);
-
-            // Formula
             const formula = `Average Access Delay = (HTH × Platters/2) + (Tracks/2 × TTT) + (60s/RPM ÷ 2)`;
-
             displayToolResult("Average Access Delay", formula, steps, totalDelaySi.toFixed(8), siUnit);
         }
 
-        // 2. Sequential Access Time
         function calculateSat() {
             const { siUnit, rpm, sectorsPerTrack } = getInputs();
             const steps = [];
-
             const timePerSectorSeconds = (60 / rpm) / sectorsPerTrack;
             const timePerSectorSi = convertFromSeconds(timePerSectorSeconds, siUnit);
-            
             steps.push(`- Time per rotation: 60s / ${rpm} = ${(60/rpm).toFixed(8)}s`);
             steps.push(`- Time per sector: ${(60/rpm).toFixed(8)}s / ${sectorsPerTrack} = ${timePerSectorSeconds.toFixed(8)}s`);
             steps.push(`- Final conversion to ${siUnit}: ${timePerSectorSeconds.toFixed(8)}s × ${conversionMultipliers[conversionFactors.indexOf(siUnit)]} = ${timePerSectorSi.toFixed(8)}${siUnit}`);
-
             const formula = `Sequential Access Time = 60s / (RPM × Sectors/Track)`;
-
             displayToolResult("Sequential Access Time", formula, steps, timePerSectorSi.toFixed(8), siUnit);
         }
 
-        // 3. Average Access Time
         function calculateAat() {
             const { siUnit, hthTime, platters, tttTime, tracks, rpm, sectorsPerTrack } = getInputs();
             const steps = [];
-
-            // Calculate components in seconds
             const hthSeconds = convertToSeconds(hthTime);
             const tttSeconds = convertToSeconds(tttTime);
             const recordingSurfaces = platters * 2;
@@ -1013,46 +1025,34 @@ Final Result: ${finalResult} ${finalUnit}`;
             const rotationalDelay = (60 / rpm) / 2;
             const aadSeconds = headToHeadDelay + trackToTrackDelay + rotationalDelay;
             const timePerSectorSeconds = (60 / rpm) / sectorsPerTrack;
-
             const aatSeconds = aadSeconds + timePerSectorSeconds;
             const aatSi = convertFromSeconds(aatSeconds, siUnit);
-
             steps.push(`- Average Access Delay (AAD): ${aadSeconds.toFixed(8)}s`);
             steps.push(`- Time to Read One Sector: ${timePerSectorSeconds.toFixed(8)}s`);
             steps.push(`- Total in seconds: ${aadSeconds.toFixed(8)}s + ${timePerSectorSeconds.toFixed(8)}s = ${aatSeconds.toFixed(8)}s`);
             steps.push(`- Final conversion to ${siUnit}: ${aatSeconds.toFixed(8)}s × ${conversionMultipliers[conversionFactors.indexOf(siUnit)]} = ${aatSi.toFixed(8)}${siUnit}`);
-
             const formula = `Average Access Time = AAD + Sequential Access Time`;
-
             displayToolResult("Average Access Time", formula, steps, aatSi.toFixed(8), siUnit);
         }
 
-        // 4. Maximum Data Transfer
         function calculateMaxTransfer() {
             const { sectorsPerTrack, rpm, bytesPerSector, dataSiUnit } = getInputs();
             const steps = [];
-
             const timePerSectorSeconds = (60 / rpm) / sectorsPerTrack;
             const sectorsPerSecond = 1 / timePerSectorSeconds;
             const bytesPerSecond = sectorsPerSecond * bytesPerSector;
-
             const dataSiIndex = dataConversionFactors.indexOf(dataSiUnit);
             const finalData = bytesPerSecond / dataConversionMultipliers[dataSiIndex];
-
             steps.push(`- Sectors per second: 1 / ${timePerSectorSeconds.toFixed(8)} = ${sectorsPerSecond.toFixed(2)} sectors/s`);
             steps.push(`- Bytes per second: ${sectorsPerSecond.toFixed(2)} sectors/s × ${bytesPerSector} B/sector = ${bytesPerSecond.toFixed(2)}B/s`);
             steps.push(`- Final conversion to ${dataSiUnit}: ${bytesPerSecond.toFixed(2)}B/s / ${dataConversionMultipliers[dataSiIndex]} = ${finalData.toFixed(2)}${dataSiUnit}B/s`);
-
             const formula = `Maximum Data Transfer Rate = (1 / Sequential Access Time) × Bytes/Sector`;
-
             displayToolResult("Maximum Data Transfer Rate", formula, steps, finalData.toFixed(2), `${dataSiUnit}B/s`);
         }
 
-        // 5. Sustained Data Transfer
         function calculateSustainedTransfer() {
             const { hthTime, platters, tttTime, tracks, rpm, sectorsPerTrack, bytesPerSector, dataSiUnit } = getInputs();
             const steps = [];
-
             const hthSeconds = convertToSeconds(hthTime);
             const tttSeconds = convertToSeconds(tttTime);
             const recordingSurfaces = platters * 2;
@@ -1062,20 +1062,15 @@ Final Result: ${finalResult} ${finalUnit}`;
             const aadSeconds = headToHeadDelay + trackToTrackDelay + rotationalDelay;
             const timePerSectorSeconds = (60 / rpm) / sectorsPerTrack;
             const aatSeconds = aadSeconds + timePerSectorSeconds;
-
             const sectorsPerSecond = 1 / aatSeconds;
             const bytesPerSecond = sectorsPerSecond * bytesPerSector;
-            
             const dataSiIndex = dataConversionFactors.indexOf(dataSiUnit);
             const finalData = bytesPerSecond / dataConversionMultipliers[dataSiIndex];
-
             steps.push(`- Average Access Time (AAT): ${aatSeconds.toFixed(8)}s`);
             steps.push(`- Sectors per second: 1 / ${aatSeconds.toFixed(8)} = ${sectorsPerSecond.toFixed(2)} sectors/s`);
             steps.push(`- Bytes per second: ${sectorsPerSecond.toFixed(2)} sectors/s × ${bytesPerSector} B/sector = ${bytesPerSecond.toFixed(2)}B/s`);
             steps.push(`- Final conversion to ${dataSiUnit}: ${bytesPerSecond.toFixed(2)}B/s / ${dataConversionMultipliers[dataSiIndex]} = ${finalData.toFixed(2)}${dataSiUnit}B/s`);
-
             const formula = `Sustained Data Transfer Rate = (1 / Average Access Time) × Bytes/Sector`;
-
             displayToolResult("Sustained Data Transfer Rate", formula, steps, finalData.toFixed(2), `${dataSiUnit}B/s`);
         }
     </script>
