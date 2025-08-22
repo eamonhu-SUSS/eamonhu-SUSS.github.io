@@ -1147,6 +1147,54 @@
             displayToolResult("Sustained Data Transfer Rate", formula, steps, finalData.toFixed(2), `${dataSiUnit}B/s`);
         }
 
+        /* --- ICT133 Project Functions --- */
+
+        // --- Super Anagram Checker ---
+        function isAnagram(word1, word2) {
+            const normalize = str => str.toLowerCase().split('').sort().join('');
+            return normalize(word1) === normalize(word2);
+        }
+
+        function countVowels(word) {
+            const vowels = 'aeiou';
+            return word.toLowerCase().split('').filter(char => vowels.includes(char)).length;
+        }
+
+        function countRepeatingChar(word) {
+            const lowerWord = word.toLowerCase();
+            if (lowerWord.length === 0) return 0;
+            const counts = {};
+            for (const char of lowerWord) {
+                counts[char] = (counts[char] || 0) + 1;
+            }
+            return Math.max(...Object.values(counts));
+        }
+
+        function checkSuperAnagram() {
+            const word1 = document.getElementById('anagram-word1').value;
+            const word2 = document.getElementById('anagram-word2').value;
+            const resultBox = document.getElementById('anagram-result');
+            const resultText = resultBox.querySelector('.step-by-step');
+
+            if (!word1 || !word2) {
+                resultText.textContent = 'Please enter both words.';
+                resultBox.style.display = 'block';
+                return;
+            }
+
+            const anagram = isAnagram(word1, word2);
+            if (anagram) {
+                if (countVowels(word2) === countRepeatingChar(word2)) {
+                    resultText.textContent = `"${word1}" is a SUPER anagram of "${word2}".`;
+                } else {
+                    resultText.textContent = `"${word1}" is an anagram of "${word2}".`;
+                }
+            } else {
+                resultText.textContent = `"${word1}" is NOT an anagram of "${word2}".`;
+            }
+            resultBox.style.display = 'block';
+        }
+        
         // --- Treasure Hunt Game ---
         let treasureGame = {};
         let treasureGameStats = {}; 
