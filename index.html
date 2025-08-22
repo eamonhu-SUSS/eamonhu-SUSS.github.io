@@ -292,7 +292,34 @@
             font-size: 0.9rem;
             margin-bottom: 1rem;
         }
-
+        
+        #treasure-board {
+            display: grid;
+            gap: 5px;
+            margin-top: 1rem;
+        }
+        
+        .treasure-cell {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .treasure-cell:hover {
+            background-color: var(--accent-blue-light);
+        }
+        
+        .treasure-cell.opened {
+            cursor: default;
+        }
+        
         /* Responsive design */
         @media (max-width: 768px) {
             nav {
@@ -563,8 +590,54 @@
             </div>
             <div id="ict133" class="subpage">
                 <h2>ICT133 - Structured Programming</h2>
-                <p>This page is a placeholder for projects and details related to **ICT133**. This module taught me how to write clean, logical code using fundamental programming constructs. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This module focused on the principles of structured programming, including control structures, data types, and function design.</p>
+                
+                <h3>Projects</h3>
+
+                <div class="tool-block">
+                    <h3>Super Anagram Checker</h3>
+                    <div class="tool-form">
+                        <div class="form-row">
+                            <label for="anagram-word1">First Word</label>
+                            <input type="text" id="anagram-word1" placeholder="Enter the first word">
+                        </div>
+                        <div class="form-row">
+                            <label for="anagram-word2">Second Word</label>
+                            <input type="text" id="anagram-word2" placeholder="Enter the second word">
+                        </div>
+                        <button onclick="checkSuperAnagram()">Check Anagram</button>
+                    </div>
+                    <div id="anagram-result" class="result-box" style="display:none;">
+                        <h4>Result</h4>
+                        <p class="step-by-step"></p>
+                    </div>
+                </div>
+
+                <div class="tool-block">
+                    <h3>Treasure Hunt Game</h3>
+                    <div id="treasure-setup">
+                        <div class="tool-form">
+                            <div class="form-row">
+                                <label for="player1-name">Player 1 Name</label>
+                                <input type="text" id="player1-name" value="Player 1">
+                            </div>
+                            <div class="form-row">
+                                <label for="player2-name">Player 2 Name</label>
+                                <input type="text" id="player2-name" value="Player 2">
+                            </div>
+                            <div class="form-row">
+                                <label for="board-size">Board Size (odd number, min 5)</label>
+                                <input type="number" id="board-size" min="5" step="2" value="5">
+                            </div>
+                            <button onclick="setupTreasureHunt()">Start Game</button>
+                        </div>
+                    </div>
+                    <div id="treasure-game-area" style="display:none;">
+                         <div id="treasure-game-status" class="result-box" style="margin-top: 1rem;"></div>
+                         <div id="treasure-board"></div>
+                         <div id="treasure-game-controls" class="button-group" style="margin-top: 1rem;"></div>
+                    </div>
+                </div>
             </div>
             <div id="ict246" class="subpage">
                 <h2>ICT246 - Operating Systems</h2>
@@ -1073,6 +1146,185 @@
             const formula = `Sustained Data Transfer Rate = (1 / Average Access Time) × Bytes/Sector`;
             displayToolResult("Sustained Data Transfer Rate", formula, steps, finalData.toFixed(2), `${dataSiUnit}B/s`);
         }
+
+        // --- Treasure Hunt Game ---
+        let treasureGame = {};
+        let treasureGameStats = {}; 
+
+        function setupTreasureHunt() {
+            const player1 = document.getElementById('player1-name').value;
+            const player2 = document.getElementById('player2-name').value;
+            const size = parseInt(document.getElementById('board-size').value, 10);
+
+            if (player1 === player2) {
+                alert("Player names must be unique.");
+                return;
+            }
+            if (size < 5 || size % 2 === 0) {
+                alert("Board size must be an odd number and at least 5.");
+                return;
+            }
+
+            treasureGameStats = {
+                players: [player1, player2],
+                scores: [0, 0]
+            };
+
+            document.getElementById('treasure-setup').style.display = 'none';
+            document.getElementById('treasure-game-area').style.display = 'block';
+
+            startNewRound(size);
+        }
+        
+        function showTreasureSetup() {
+            document.getElementById('treasure-setup').style.display = 'block';
+            document.getElementById('treasure-game-area').style.display = 'none';
+        }
+
+        function startNewRound(size) {
+            const boardSize = size || treasureGame.boardSize;
+
+            treasureGame = {
+                players: treasureGameStats.players,
+                boardSize: boardSize,
+                board: getNewTreasureBoard(boardSize),
+                scores: [0, 0], // Round scores
+                currentPlayer: Math.random() < 0.5 ? 0 : 1,
+                totalTreasures: Math.floor((boardSize * boardSize) / 2),
+                treasuresFound: 0,
+                gameOver: false,
+                statsUpdated: false
+            };
+            
+            renderTreasureBoard();
+            updateGameStatus();
+        }
+
+        function getNewTreasureBoard(size) {
+            const board = Array(size).fill(null).map(() => Array(size).fill(null).map(() => ({ hasTreasure: false, opened: false })));
+            let treasuresPlaced = 0;
+            const totalTreasures = Math.floor((size * size) / 2);
+
+            while (treasuresPlaced < totalTreasures) {
+                const row = Math.floor(Math.random() * size);
+                const col = Math.floor(Math.random() * size);
+                if (!board[row][col].hasTreasure) {
+                    board[row][col].hasTreasure = true;
+                    treasuresPlaced++;
+                }
+            }
+            return board;
+        }
+
+        function renderTreasureBoard() {
+            const boardElement = document.getElementById('treasure-board');
+            boardElement.innerHTML = '';
+            boardElement.style.gridTemplateColumns = `repeat(${treasureGame.boardSize}, 40px)`;
+
+            treasureGame.board.forEach((row, r) => {
+                row.forEach((cell, c) => {
+                    const cellElement = document.createElement('div');
+                    cellElement.classList.add('treasure-cell');
+                    if (cell.opened) {
+                        cellElement.classList.add('opened');
+                        cellElement.textContent = cell.hasTreasure ? '💎' : '⚪';
+                    } else {
+                        cellElement.textContent = '❓';
+                        if (!treasureGame.gameOver) {
+                            cellElement.onclick = () => handleCellClick(r, c);
+                        }
+                    }
+                    boardElement.appendChild(cellElement);
+                });
+            });
+        }
+        
+        function handleCellClick(row, col) {
+            if (treasureGame.gameOver || treasureGame.board[row][col].opened) {
+                return;
+            }
+
+            const cell = treasureGame.board[row][col];
+            cell.opened = true;
+
+            if (cell.hasTreasure) {
+                treasureGame.scores[treasureGame.currentPlayer]++;
+                treasureGame.treasuresFound++;
+            }
+
+            checkGameOver();
+
+            if (!treasureGame.gameOver) {
+                treasureGame.currentPlayer = 1 - treasureGame.currentPlayer;
+            }
+            
+            renderTreasureBoard();
+            updateGameStatus();
+        }
+
+        function checkGameOver() {
+            const winningScore = Math.floor(treasureGame.totalTreasures / 2) + 1;
+            if (treasureGame.scores[0] >= winningScore || treasureGame.scores[1] >= winningScore || treasureGame.treasuresFound === treasureGame.totalTreasures) {
+                treasureGame.gameOver = true;
+            }
+        }
+
+        function updateGameStatus() {
+            const statusElement = document.getElementById('treasure-game-status');
+            const controlsElement = document.getElementById('treasure-game-controls');
+            controlsElement.innerHTML = ''; // Clear previous controls
+            
+            let roundScoresText = `Round Score: ${treasureGame.players[0]} - ${treasureGame.scores[0]} | ${treasureGame.players[1]} - ${treasureGame.scores[1]}`;
+            let overallScoresText = `Overall Score: ${treasureGameStats.players[0]} - ${treasureGameStats.scores[0]} | ${treasureGameStats.players[1]} - ${treasureGameStats.scores[1]}`;
+            let statusText = '';
+
+            if (treasureGame.gameOver) {
+                let roundResultText = '';
+                if (!treasureGame.statsUpdated) {
+                    if (treasureGame.scores[0] > treasureGame.scores[1]) {
+                        roundResultText = `<strong>${treasureGame.players[0]} wins the round!</strong>`;
+                        treasureGameStats.scores[0] += 1;
+                    } else if (treasureGame.scores[1] > treasureGame.scores[0]) {
+                        roundResultText = `<strong>${treasureGame.players[1]} wins the round!</strong>`;
+                        treasureGameStats.scores[1] += 1;
+                    } else {
+                        roundResultText = `<strong>It's a tie!</strong>`;
+                        treasureGameStats.scores[0] += 0.5;
+                        treasureGameStats.scores[1] += 0.5;
+                    }
+                    treasureGame.statsUpdated = true; // Prevent scores from updating multiple times
+                }
+                 // Re-fetch the result text if already updated
+                else {
+                     if (treasureGame.scores[0] > treasureGame.scores[1]) {
+                        roundResultText = `<strong>${treasureGame.players[0]} wins the round!</strong>`;
+                    } else if (treasureGame.scores[1] > treasureGame.scores[0]) {
+                        roundResultText = `<strong>${treasureGame.players[1]} wins the round!</strong>`;
+                    } else {
+                        roundResultText = `<strong>It's a tie!</strong>`;
+                    }
+                }
+                
+                overallScoresText = `Overall Score: ${treasureGameStats.players[0]} - ${treasureGameStats.scores[0]} | ${treasureGameStats.players[1]} - ${treasureGameStats.scores[1]}`;
+                statusText = `${roundScoresText}<br>${roundResultText}<br>${overallScoresText}`;
+                
+                const rematchButton = document.createElement('button');
+                rematchButton.textContent = 'Rematch';
+                rematchButton.onclick = () => startNewRound();
+                controlsElement.appendChild(rematchButton);
+
+            } else {
+                statusText = `${roundScoresText}<br>${overallScoresText}<br>Current Turn: <strong>${treasureGame.players[treasureGame.currentPlayer]}</strong>`;
+            }
+            
+            const newGameButton = document.createElement('button');
+            newGameButton.textContent = 'New Game (Reset All)';
+            newGameButton.onclick = showTreasureSetup;
+            controlsElement.appendChild(newGameButton);
+            
+            statusElement.innerHTML = statusText;
+        }
+        
     </script>
 
 </body>
