@@ -1048,6 +1048,166 @@
             
             displayResult(result, steps, 'vernam-result');
         }
+
+/* --- ICT318: Columnar Transposition & DES Functions --- */
+
+        function runColumnarCipher() {
+            let text = document.getElementById('columnar-text').value.toUpperCase().replace(/\s+/g, '');
+            let key = document.getElementById('columnar-key').value.toUpperCase().replace(/\s+/g, '');
+            const mode = document.querySelector('input[name="columnar-mode"]:checked').value;
+            const steps = [];
+            let result = '';
+
+            function showMessage(message) {
+                const resultBox = document.getElementById('columnar-result');
+                resultBox.querySelector('.step-by-step').innerHTML = message;
+                resultBox.style.display = 'block';
+            }
+
+            if (!text || !key) {
+                showMessage('Please enter both text and a key.');
+                return;
+            }
+
+            // Determine alphabetical order of the key
+            let keyArr = key.split('').map((char, index) => ({char, index}));
+            keyArr.sort((a, b) => a.char.localeCompare(b.char) || a.index - b.index);
+            
+            let orderLabels = new Array(key.length);
+            keyArr.forEach((item, i) => orderLabels[item.index] = i + 1);
+            
+            steps.push(`Key Processing:`);
+            steps.push(`Key:   ${key.split('').join(' ')}`);
+            steps.push(`Order: ${orderLabels.join(' ')}\n`);
+
+            const numCols = key.length;
+            const numRows = Math.ceil(text.length / numCols);
+
+            if (mode === 'encipher') {
+                // Build the grid
+                let grid = [];
+                for (let i = 0; i < text.length; i += numCols) {
+                    grid.push(text.slice(i, i + numCols).split(''));
+                }
+                
+                steps.push(`Grid Mapping:`);
+                grid.forEach(row => steps.push(row.join(' ')));
+                steps.push(`\nReading columns by alphabetical order of the key...`);
+
+                // Read columns based on sorted key order
+                for (let i = 0; i < numCols; i++) {
+                    let colIndex = keyArr[i].index;
+                    let colText = '';
+                    for (let r = 0; r < grid.length; r++) {
+                        if (grid[r][colIndex]) colText += grid[r][colIndex];
+                    }
+                    result += colText;
+                    steps.push(`- Reading Column ${colIndex + 1} (Order ${i + 1}): ${colText}`);
+                }
+            } else {
+                // Decipher
+                let colLengths = new Array(numCols).fill(Math.floor(text.length / numCols));
+                for(let i = 0; i < text.length % numCols; i++) {
+                    colLengths[i]++;
+                }
+
+                let grid = Array.from({length: numRows}, () => new Array(numCols).fill(''));
+                let textIndex = 0;
+
+                steps.push(`Reconstructing Grid...`);
+                for (let i = 0; i < numCols; i++) {
+                    let colIndex = keyArr[i].index;
+                    let colLen = colLengths[colIndex];
+                    let colText = '';
+                    for (let r = 0; r < colLen; r++) {
+                        grid[r][colIndex] = text[textIndex++];
+                        colText += grid[r][colIndex];
+                    }
+                    steps.push(`- Filling Column ${colIndex + 1} (Order ${i + 1}) with ${colLen} chars: ${colText}`);
+                }
+
+                steps.push(`\nReconstructed Grid:`);
+                grid.forEach(row => steps.push(row.join(' ')));
+                
+                result = grid.flat().join('');
+            }
+
+            displayResult(result, steps, 'columnar-result');
+        }
+
+        function runDesBitCalc() {
+            const hexText = document.getElementById('des-text').value.toUpperCase().replace(/\s+/g, '');
+            const permType = document.getElementById('des-permutation').value;
+            const steps = [];
+            
+            function showMessage(message) {
+                const resultBox = document.getElementById('des-result');
+                resultBox.querySelector('.step-by-step').innerHTML = message;
+                resultBox.style.display = 'block';
+            }
+
+            // Regex check for exactly 16 hex characters
+            if (!/^[0-9A-F]{16}$/.test(hexText)) {
+                showMessage('Error: Please enter exactly 16 Valid Hexadecimal characters (0-9, A-F).');
+                return;
+            }
+
+            // DES Initial Permutation Table
+            const IP = [
+                58, 50, 42, 34, 26, 18, 10, 2,
+                60, 52, 44, 36, 28, 20, 12, 4,
+                62, 54, 46, 38, 30, 22, 14, 6,
+                64, 56, 48, 40, 32, 24, 16, 8,
+                57, 49, 41, 33, 25, 17, 9,  1,
+                59, 51, 43, 35, 27, 19, 11, 3,
+                61, 53, 45, 37, 29, 21, 13, 5,
+                63, 55, 47, 39, 31, 23, 15, 7
+            ];
+
+            // DES Inverse Initial Permutation Table
+            const IP_INV = [
+                40, 8, 48, 16, 56, 24, 64, 32,
+                39, 7, 47, 15, 55, 23, 63, 31,
+                38, 6, 46, 14, 54, 22, 62, 30,
+                37, 5, 45, 13, 53, 21, 61, 29,
+                36, 4, 44, 12, 52, 20, 60, 28,
+                35, 3, 43, 11, 51, 19, 59, 27,
+                34, 2, 42, 10, 50, 18, 58, 26,
+                33, 1, 41,  9, 49, 17, 57, 25
+            ];
+
+            const table = permType === 'IP' ? IP : IP_INV;
+            const tableName = permType === 'IP' ? "Initial Permutation (IP)" : "Inverse Initial Permutation (IP⁻¹)";
+
+            // Convert Hex to 64-bit Binary String
+            let binText = hexText.split('').map(hex => parseInt(hex, 16).toString(2).padStart(4, '0')).join('');
+            
+            steps.push(`1. Convert 16-char Hex to 64-bit Binary:`);
+            steps.push(`Hex: ${hexText}`);
+            steps.push(`Bin: ${binText.match(/.{1,8}/g).join(' ')}\n`);
+
+            steps.push(`2. Apply ${tableName} Table:`);
+            steps.push(`(Note: DES tables are 1-indexed. The 58th bit of input becomes the 1st bit of output, etc.)\n`);
+
+            let permutedBin = '';
+            for (let i = 0; i < 64; i++) {
+                // Table values are 1-indexed, strings are 0-indexed
+                permutedBin += binText[table[i] - 1]; 
+            }
+
+            steps.push(`Output Binary Structure (Grouped by Bytes):`);
+            steps.push(`Bin: ${permutedBin.match(/.{1,8}/g).join(' ')}\n`);
+
+            // Convert back to Hex
+            let resultHex = '';
+            for (let i = 0; i < 64; i += 4) {
+                resultHex += parseInt(permutedBin.slice(i, i + 4), 2).toString(16).toUpperCase();
+            }
+
+            steps.push(`3. Convert Output Binary back to Hex:`);
+            
+            displayResult(resultHex, steps, 'des-result');
+        }
         
         /* --- Storage Formula Calculator Logic (Unchanged) --- */
         
