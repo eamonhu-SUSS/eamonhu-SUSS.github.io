@@ -446,6 +446,58 @@
                         <pre class="step-by-step"></pre>
                     </div>
                 </div>
+
+                    <div class="cipher-block">
+                    <h3>Columnar Transposition Cipher</h3>
+                    <p style="font-size:0.9rem;">
+                        Spaces are automatically removed from the text before enciphering, following standard cryptographic practice.
+                    </p>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="columnar-text">Plaintext / Ciphertext</label>
+                            <textarea id="columnar-text" rows="3" placeholder="Enter text here..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label for="columnar-key">Key (Word or Phrase)</label>
+                            <input type="text" id="columnar-key" placeholder="Enter key (e.g., SECRET)">
+                        </div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="columnar-mode" value="encipher" checked> Encipher</label>
+                            <label><input type="radio" name="columnar-mode" value="decipher"> Decipher</label>
+                        </div>
+                        <button onclick="runColumnarCipher()">Run Columnar Transposition</button>
+                    </div>
+                    <div id="columnar-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
+
+                <div class="cipher-block">
+                    <h3>DES Bit Calculator (Permutations)</h3>
+                    <p style="font-size:0.9rem;">
+                        Perform standard Data Encryption Standard (DES) bit-level permutations. Input must be exactly 16 Hexadecimal characters (64 bits).
+                    </p>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="des-text">64-bit Hexadecimal Input</label>
+                            <input type="text" id="des-text" placeholder="e.g., 0123456789ABCDEF" maxlength="16">
+                        </div>
+                        <div class="form-row">
+                            <label for="des-permutation">Select Permutation Step</label>
+                            <select id="des-permutation">
+                                <option value="IP" selected>Initial Permutation (IP)</option>
+                                <option value="IP_INV">Inverse Initial Permutation (IP⁻¹)</option>
+                            </select>
+                        </div>
+                        <button onclick="runDesBitCalc()">Run DES Permutation</button>
+                    </div>
+                    <div id="des-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
+                
             </div>
 
             <!-- Past Semesters Combined Page -->
