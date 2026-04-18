@@ -59,6 +59,7 @@
         nav {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             background-color: var(--accent-blue);
             padding: 0.5rem 0;
         }
@@ -341,171 +342,44 @@
         </header>
 
         <nav>
-            <a href="#eng335" class="active">ENG335</a>
-            <a href="#ict225">ICT225</a>
-            <a href="#ict239">ICT239</a>
-            <a href="#ict318">ICT318</a>
+            <a href="#ict330" class="active">ICT330</a>
+            <a href="#ict335">ICT335</a>
+            <a href="#ict340">ICT340</a>
+            <a href="#ict348">ICT348</a>
             <a href="#past-semesters">Past Semesters</a>
         </nav>
 
         <div class="page-wrapper">
-            <!-- Current Semester Courses -->
-            <div id="eng335" class="subpage active">
-                <h2>ENG335 - Machine Learning</h2>
-                <p>Welcome to the Machine Learning section. This page will be updated with projects and information related to ENG335, covering topics such as supervised learning, unsupervised learning, neural networks, and model evaluation.</p>
+            <div id="ict330" class="subpage active">
+                <h2>ICT330 - Database Management Systems</h2>
+                <p>Welcome to the Database Management Systems section. This page will be updated with projects and information related to ICT330, covering topics such as relational models, SQL, database design, and normalization.</p>
                 <p>Stay tuned for future updates and code examples!</p>
             </div>
             
-            <div id="ict225" class="subpage">
-                <h2>ICT225 - Management Information Systems</h2>
-                <p>This section is dedicated to my work in Management Information Systems (ICT225). Here you'll find information on how technology and information systems are used to support business operations, decision-making, and organizational strategy.</p>
-                <p>Topics include enterprise systems, data management, and the role of MIS in modern organizations.</p>
+            <div id="ict335" class="subpage">
+                <h2>ICT335 - Cloud Computing, Business Case and Technical Models</h2>
+                <p>This section is dedicated to my work in Cloud Computing (ICT335). Here you'll find information on cloud architectures, delivery models (IaaS, PaaS, SaaS), deployment models, and the business strategies driving cloud adoption.</p>
+                <p>Topics will also cover containerization, virtualization, and cloud security frameworks.</p>
             </div>
             
-            <div id="ict239" class="subpage">
-                <h2>ICT239 - Web Application Development</h2>
-                <p>Explore my projects from the Web Application Development course (ICT239). This page will showcase my skills in front-end and back-end web technologies, including HTML, CSS, JavaScript, and various frameworks.</p>
-                <p>Future content will include live demos and source code for the applications I develop.</p>
+            <div id="ict340" class="subpage">
+                <h2>ICT340 - Application Analysis and Design</h2>
+                <p>Explore my projects from the Application Analysis and Design course (ICT340). This page will showcase skills in gathering system requirements, utilizing UML (Unified Modeling Language), and applying robust software design patterns.</p>
+                <p>Future content will include diagrams, system architectures, and case studies.</p>
             </div>
             
-            <div id="ict318" class="subpage">
-                <h2>ICT318 - Network Security</h2>
-                <p>This is the hub for Network Security (ICT318). Below, you can explore and interact with three classic ciphers: Caesar, Vigenère, and Vernam. Use the tools to encipher or decipher text and see the step-by-step solution for each operation.</p>
-                
-                <div class="cipher-block">
-                    <!-- Caesar Cipher -->
-                    <h3>Caesar Cipher</h3>
-                    <div class="cipher-form">
-                        <div class="form-row">
-                            <label for="caesar-text">Plaintext / Ciphertext</label>
-                            <textarea id="caesar-text" rows="3" placeholder="Enter text here..."></textarea>
-                        </div>
-                        <div class="form-row">
-                            <label for="caesar-key">Key (1-25)</label>
-                            <input type="number" id="caesar-key" min="1" max="25" value="3">
-                        </div>
-                        <div class="radio-group">
-                            <label><input type="radio" name="caesar-mode" value="encipher" checked> Encipher</label>
-                            <label><input type="radio" name="caesar-mode" value="decipher"> Decipher</label>
-                        </div>
-                        <button onclick="runCaesarCipher()">Run Caesar Cipher</button>
-                    </div>
-                    <div id="caesar-result" class="result-box" style="display:none;">
-                        <h4>Result & Steps</h4>
-                        <pre class="step-by-step"></pre>
-                    </div>
-                </div>
-
-                <!-- Vigenère Cipher -->
-                <div class="cipher-block">
-                    <h3>Vigenère Cipher</h3>
-                    <div class="cipher-form">
-                        <div class="form-row">
-                            <label for="vigenere-text">Plaintext / Ciphertext</label>
-                            <textarea id="vigenere-text" rows="3" placeholder="Enter text here..."></textarea>
-                        </div>
-                        <div class="form-row">
-                            <label for="vigenere-key">Key (word or phrase)</label>
-                            <input type="text" id="vigenere-key" placeholder="Enter key here...">
-                        </div>
-                        <div class="radio-group">
-                            <label><input type="radio" name="vigenere-mode" value="encipher" checked> Encipher</label>
-                            <label><input type="radio" name="vigenere-mode" value="decipher"> Decipher</label>
-                        </div>
-                        <button onclick="runVigenereCipher()">Run Vigenère Cipher</button>
-                    </div>
-                    <div id="vigenere-result" class="result-box" style="display:none;">
-                        <h4>Result & Steps</h4>
-                        <pre class="step-by-step"></pre>
-                    </div>
-                </div>
-
-                <!-- Vernam Cipher -->
-                <div class="cipher-block">
-                    <h3>Vernam Cipher (One-Time Pad)</h3>
-                    <p style="font-size:0.9rem;">
-                        The key must be the same length as the plaintext/ciphertext.
-                    </p>
-                    <div class="cipher-form">
-                        <div class="form-row">
-                            <label for="vernam-text">Plaintext / Ciphertext</label>
-                            <textarea id="vernam-text" rows="3" placeholder="Enter text here..."></textarea>
-                        </div>
-                        <div class="form-row">
-                            <label for="vernam-key">Key (same length as text)</label>
-                            <input type="text" id="vernam-key" placeholder="Enter key here...">
-                        </div>
-                        <div class="radio-group">
-                            <label><input type="radio" name="vernam-mode" value="encipher" checked> Encipher</label>
-                            <label><input type="radio" name="vernam-mode" value="decipher"> Decipher</label>
-                        </div>
-                        <button onclick="runVernamCipher()">Run Vernam Cipher</button>
-                    </div>
-                    <div id="vernam-result" class="result-box" style="display:none;">
-                        <h4>Result & Steps</h4>
-                        <pre class="step-by-step"></pre>
-                    </div>
-                </div>
-
-                    <div class="cipher-block">
-                    <h3>Columnar Transposition Cipher</h3>
-                    <p style="font-size:0.9rem;">
-                        Spaces are automatically removed from the text before enciphering, following standard cryptographic practice.
-                    </p>
-                    <div class="cipher-form">
-                        <div class="form-row">
-                            <label for="columnar-text">Plaintext / Ciphertext</label>
-                            <textarea id="columnar-text" rows="3" placeholder="Enter text here..."></textarea>
-                        </div>
-                        <div class="form-row">
-                            <label for="columnar-key">Key (Word or Phrase)</label>
-                            <input type="text" id="columnar-key" placeholder="Enter key (e.g., SECRET)">
-                        </div>
-                        <div class="radio-group">
-                            <label><input type="radio" name="columnar-mode" value="encipher" checked> Encipher</label>
-                            <label><input type="radio" name="columnar-mode" value="decipher"> Decipher</label>
-                        </div>
-                        <button onclick="runColumnarCipher()">Run Columnar Transposition</button>
-                    </div>
-                    <div id="columnar-result" class="result-box" style="display:none;">
-                        <h4>Result & Steps</h4>
-                        <pre class="step-by-step"></pre>
-                    </div>
-                </div>
-
-                <div class="cipher-block">
-                    <h3>DES Bit Calculator (Permutations)</h3>
-                    <p style="font-size:0.9rem;">
-                        Perform standard Data Encryption Standard (DES) bit-level permutations. Input must be exactly 16 Hexadecimal characters (64 bits).
-                    </p>
-                    <div class="cipher-form">
-                        <div class="form-row">
-                            <label for="des-text">64-bit Hexadecimal Input</label>
-                            <input type="text" id="des-text" placeholder="e.g., 0123456789ABCDEF" maxlength="16">
-                        </div>
-                        <div class="form-row">
-                            <label for="des-permutation">Select Permutation Step</label>
-                            <select id="des-permutation">
-                                <option value="IP" selected>Initial Permutation (IP)</option>
-                                <option value="IP_INV">Inverse Initial Permutation (IP⁻¹)</option>
-                            </select>
-                        </div>
-                        <button onclick="runDesBitCalc()">Run DES Permutation</button>
-                    </div>
-                    <div id="des-result" class="result-box" style="display:none;">
-                        <h4>Result & Steps</h4>
-                        <pre class="step-by-step"></pre>
-                    </div>
-                </div>
-                
+            <div id="ict348" class="subpage">
+                <h2>ICT348 - Information Security Offence Defence and Incident Management</h2>
+                <p>This is the hub for Information Security (ICT348). Topics explored here include the threat landscape, defensive network strategies, offensive techniques (ethical hacking), vulnerability assessment, and incident response management.</p>
+                <p>Below, future tools and security scripts will be posted.</p>
             </div>
 
-            <!-- Past Semesters Combined Page -->
             <div id="past-semesters" class="subpage">
                 <h2>Past Semesters</h2>
                 <div class="sub-nav">
                     <a href="#semester1-heading" id="nav-semester1" class="active">Semester 1</a>
                     <a href="#semester2-heading" id="nav-semester2">Semester 2</a>
+                    <a href="#semester3-heading" id="nav-semester3">Semester 3</a>
                 </div>
                 
                 <div id="semester1-content">
@@ -563,9 +437,173 @@
                         <p>This module enhanced skills in critical thinking, logical reasoning, and structured problem-solving techniques.</p>
                     </a>
                 </div>
+
+                <div id="semester3-content">
+                    <h3 id="semester3-heading">Semester 3</h3>
+                    <a href="#eng335" class="course-link">
+                        <h4>ENG335 - Machine Learning</h4>
+                        <p>Covered topics such as supervised learning, unsupervised learning, neural networks, and model evaluation.</p>
+                    </a>
+                    <a href="#ict225" class="course-link">
+                        <h4>ICT225 - Management Information Systems</h4>
+                        <p>Information on how technology and information systems are used to support business operations, decision-making, and organizational strategy.</p>
+                    </a>
+                    <a href="#ict239" class="course-link">
+                        <h4>ICT239 - Web Application Development</h4>
+                        <p>Showcasing skills in front-end and back-end web technologies, including HTML, CSS, JavaScript, and various frameworks.</p>
+                    </a>
+                    <a href="#ict318" class="course-link">
+                        <h4>ICT318 - Network Security</h4>
+                        <p>A hub containing interactive classic cipher tools (Caesar, Vigenère, Vernam, Columnar Transposition) and DES calculations.</p>
+                    </a>
+                </div>
             </div>
             
-            <!-- Individual Module Pages -->
+            <div id="eng335" class="subpage">
+                <h2>ENG335 - Machine Learning</h2>
+                <p>Welcome to the Machine Learning section. This page was used for projects and information related to ENG335, covering topics such as supervised learning, unsupervised learning, neural networks, and model evaluation.</p>
+            </div>
+            
+            <div id="ict225" class="subpage">
+                <h2>ICT225 - Management Information Systems</h2>
+                <p>This section is dedicated to my work in Management Information Systems (ICT225). Here you'll find information on how technology and information systems are used to support business operations, decision-making, and organizational strategy.</p>
+                <p>Topics include enterprise systems, data management, and the role of MIS in modern organizations.</p>
+            </div>
+            
+            <div id="ict239" class="subpage">
+                <h2>ICT239 - Web Application Development</h2>
+                <p>Explore my projects from the Web Application Development course (ICT239). This page showcases my skills in front-end and back-end web technologies, including HTML, CSS, JavaScript, and various frameworks.</p>
+            </div>
+            
+            <div id="ict318" class="subpage">
+                <h2>ICT318 - Network Security</h2>
+                <p>This is the hub for Network Security (ICT318). Below, you can explore and interact with classic ciphers and cryptographic operations.</p>
+                
+                <div class="cipher-block">
+                    <h3>Caesar Cipher</h3>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="caesar-text">Plaintext / Ciphertext</label>
+                            <textarea id="caesar-text" rows="3" placeholder="Enter text here..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label for="caesar-key">Key (1-25)</label>
+                            <input type="number" id="caesar-key" min="1" max="25" value="3">
+                        </div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="caesar-mode" value="encipher" checked> Encipher</label>
+                            <label><input type="radio" name="caesar-mode" value="decipher"> Decipher</label>
+                        </div>
+                        <button onclick="runCaesarCipher()">Run Caesar Cipher</button>
+                    </div>
+                    <div id="caesar-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
+
+                <div class="cipher-block">
+                    <h3>Vigenère Cipher</h3>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="vigenere-text">Plaintext / Ciphertext</label>
+                            <textarea id="vigenere-text" rows="3" placeholder="Enter text here..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label for="vigenere-key">Key (word or phrase)</label>
+                            <input type="text" id="vigenere-key" placeholder="Enter key here...">
+                        </div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="vigenere-mode" value="encipher" checked> Encipher</label>
+                            <label><input type="radio" name="vigenere-mode" value="decipher"> Decipher</label>
+                        </div>
+                        <button onclick="runVigenereCipher()">Run Vigenère Cipher</button>
+                    </div>
+                    <div id="vigenere-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
+
+                <div class="cipher-block">
+                    <h3>Vernam Cipher (One-Time Pad)</h3>
+                    <p style="font-size:0.9rem;">
+                        The key must be the same length as the plaintext/ciphertext.
+                    </p>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="vernam-text">Plaintext / Ciphertext</label>
+                            <textarea id="vernam-text" rows="3" placeholder="Enter text here..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label for="vernam-key">Key (same length as text)</label>
+                            <input type="text" id="vernam-key" placeholder="Enter key here...">
+                        </div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="vernam-mode" value="encipher" checked> Encipher</label>
+                            <label><input type="radio" name="vernam-mode" value="decipher"> Decipher</label>
+                        </div>
+                        <button onclick="runVernamCipher()">Run Vernam Cipher</button>
+                    </div>
+                    <div id="vernam-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
+                
+                <div class="cipher-block">
+                    <h3>Columnar Transposition Cipher</h3>
+                    <p style="font-size:0.9rem;">
+                        Spaces are automatically removed from the text before enciphering, following standard cryptographic practice.
+                    </p>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="columnar-text">Plaintext / Ciphertext</label>
+                            <textarea id="columnar-text" rows="3" placeholder="Enter text here..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label for="columnar-key">Key (Word or Phrase)</label>
+                            <input type="text" id="columnar-key" placeholder="Enter key (e.g., SECRET)">
+                        </div>
+                        <div class="radio-group">
+                            <label><input type="radio" name="columnar-mode" value="encipher" checked> Encipher</label>
+                            <label><input type="radio" name="columnar-mode" value="decipher"> Decipher</label>
+                        </div>
+                        <button onclick="runColumnarCipher()">Run Columnar Transposition</button>
+                    </div>
+                    <div id="columnar-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
+
+                <div class="cipher-block">
+                    <h3>DES Bit Calculator (Permutations)</h3>
+                    <p style="font-size:0.9rem;">
+                        Perform standard Data Encryption Standard (DES) bit-level permutations. Input must be exactly 16 Hexadecimal characters (64 bits).
+                    </p>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label for="des-text">64-bit Hexadecimal Input</label>
+                            <input type="text" id="des-text" placeholder="e.g., 0123456789ABCDEF" maxlength="16">
+                        </div>
+                        <div class="form-row">
+                            <label for="des-permutation">Select Permutation Step</label>
+                            <select id="des-permutation">
+                                <option value="IP" selected>Initial Permutation (IP)</option>
+                                <option value="IP_INV">Inverse Initial Permutation (IP⁻¹)</option>
+                            </select>
+                        </div>
+                        <button onclick="runDesBitCalc()">Run DES Permutation</button>
+                    </div>
+                    <div id="des-result" class="result-box" style="display:none;">
+                        <h4>Result & Steps</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
+
+            </div>
+
             <div id="ict101" class="subpage">
                 <h2>ICT101 - Computational Thinking</h2>
                 <p>This page is a placeholder for projects and details related to **ICT101**. This course introduced me to the core concepts of breaking down problems and designing efficient solutions. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
@@ -747,121 +785,96 @@
             const pageWrapper = document.querySelector('.page-wrapper');
 
             // --- State Management ---
-            // A variable to hold the "cleanup" function for our scroll listener.
-            // This ensures we don't have multiple listeners running when we switch pages.
             let removePastSemestersListener = null;
 
             // --- Core Functions ---
-
-            /**
-             * Shows a specific subpage based on its ID (e.g., '#eng335')
-             * and handles the setup/teardown of page-specific logic.
-             * @param {string} pageId The ID of the page to show.
-             */
             const showPage = (pageId) => {
-                // 1. Clean up from the previous page. If a scroll listener for 'Past Semesters' exists, remove it.
                 if (removePastSemestersListener) {
                     removePastSemestersListener();
                     removePastSemestersListener = null;
                 }
 
-                // 2. Hide all pages and deactivate all main navigation links.
                 subpages.forEach(page => {
                     page.classList.remove('active');
                     page.style.display = 'none';
                 });
                 navLinks.forEach(link => link.classList.remove('active'));
 
-                // 3. Find the target page to display.
                 const targetPage = document.querySelector(pageId);
                 if (!targetPage) {
-                    // Fallback to the first page if the hash is invalid.
                     showPage(navLinks[0].getAttribute('href'));
                     return;
                 }
 
-                // 4. Activate the correct main navigation link.
                 const mainNavLink = document.querySelector(`nav a[href="${pageId}"]`);
                 if (mainNavLink) {
                     mainNavLink.classList.add('active');
                 } else {
-                    // This handles individual module pages, activating the 'Past Semesters' tab as their parent.
                     const pastSemestersLink = document.querySelector('nav a[href="#past-semesters"]');
                     if (pastSemestersLink) pastSemestersLink.classList.add('active');
                 }
 
-                // 5. Show the page with a fade-in effect.
                 targetPage.style.display = 'block';
                 setTimeout(() => {
                     targetPage.classList.add('active');
-                    pageWrapper.scrollTop = 0; // Reset scroll position for the new page.
+                    pageWrapper.scrollTop = 0;
 
-                    // 6. If this is the 'Past Semesters' page, set up its special scroll-aware navigation.
                     if (pageId === '#past-semesters') {
                         removePastSemestersListener = setupPastSemestersScrollListener();
                     }
-                }, 10); // A tiny delay allows the CSS transition to work correctly.
+                }, 10);
             };
 
-            /**
-             * Sets up a scroll event listener for the 'Past Semesters' page.
-             * This function highlights the sub-nav link ('Semester 1' or 'Semester 2')
-             * based on the user's scroll position.
-             * @returns {Function} A cleanup function to remove the event listener.
-             */
             const setupPastSemestersScrollListener = () => {
                 const subNav = document.querySelector('#past-semesters .sub-nav');
                 const s1Link = document.getElementById('nav-semester1');
                 const s2Link = document.getElementById('nav-semester2');
+                const s3Link = document.getElementById('nav-semester3');
                 const s1Heading = document.getElementById('semester1-heading');
                 const s2Heading = document.getElementById('semester2-heading');
+                const s3Heading = document.getElementById('semester3-heading');
 
-                if (!subNav || !s1Link || !s2Link || !s1Heading || !s2Heading) {
+                if (!subNav || !s1Link || !s2Link || !s3Link || !s1Heading || !s2Heading || !s3Heading) {
                     console.error("Required elements for Past Semesters scroll listener not found.");
-                    return () => {}; // Return an empty cleanup function if setup fails.
+                    return () => {};
                 }
 
                 const handleScroll = () => {
-                    // Determine the "trigger line". When a heading crosses this line, the active link changes.
-                    // It's the top of the scrollable area plus the height of the sticky sub-nav.
                     const scrollTriggerPosition = pageWrapper.scrollTop + subNav.offsetHeight;
                     const s1Top = s1Heading.offsetTop;
                     const s2Top = s2Heading.offsetTop;
+                    const s3Top = s3Heading.offsetTop;
 
-                    // Logic to set the active link based on which heading is currently visible.
-                    if (scrollTriggerPosition >= s2Top) {
-                        s2Link.classList.add('active');
+                    if (scrollTriggerPosition >= s3Top) {
+                        s3Link.classList.add('active');
+                        s2Link.classList.remove('active');
                         s1Link.classList.remove('active');
-                    } else if (scrollTriggerPosition >= s1Top) {
-                        s1Link.classList.add('active');
-                        s2Link.classList.remove('active');
+                    } else if (scrollTriggerPosition >= s2Top) {
+                        s2Link.classList.add('active');
+                        s3Link.classList.remove('active');
+                        s1Link.classList.remove('active');
                     } else {
-                        // Default to Semester 1 if scrolled above its heading.
                         s1Link.classList.add('active');
                         s2Link.classList.remove('active');
+                        s3Link.classList.remove('active');
                     }
                 };
 
-                handleScroll(); // Run once on setup to set the initial state correctly.
+                handleScroll();
                 pageWrapper.addEventListener('scroll', handleScroll);
-
-                // Return a "cleanup" function to be called when we navigate away from this page.
                 return () => pageWrapper.removeEventListener('scroll', handleScroll);
             };
 
             // --- Event Listeners Setup ---
-
-            // Main navigation click handler.
             document.querySelector('nav').addEventListener('click', (e) => {
                 if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
                     e.preventDefault();
                     const targetId = e.target.getAttribute('href');
-                    history.pushState(null, '', targetId); // Update URL without full reload.
+                    history.pushState(null, '', targetId);
                     showPage(targetId);
                 }
             });
             
-            // 'Past Semesters' sub-navigation click handler for smooth scrolling.
             document.querySelector('.sub-nav').addEventListener('click', (e) => {
                 if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
                     e.preventDefault();
@@ -870,7 +883,6 @@
                     const subNav = e.target.closest('.sub-nav');
 
                     if (targetElement && subNav) {
-                        // Calculate where to scroll, accounting for the sticky sub-nav's height.
                         const topPos = targetElement.offsetTop - subNav.offsetHeight;
                         pageWrapper.scrollTo({
                             top: topPos,
@@ -880,7 +892,6 @@
                 }
             });
 
-            // Handle browser back/forward button clicks.
             window.addEventListener('popstate', () => {
                 const currentHash = window.location.hash || navLinks[0].getAttribute('href');
                 showPage(currentHash);
@@ -891,7 +902,7 @@
             showPage(initialHash);
         });
 
-        /* --- Cipher Functions (Unchanged) --- */
+        /* --- Cipher Functions --- */
 
         const getAlphabet = () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -1049,7 +1060,7 @@
             displayResult(result, steps, 'vernam-result');
         }
 
-/* --- ICT318: Columnar Transposition & DES Functions --- */
+        /* --- ICT318: Columnar Transposition & DES Functions --- */
 
         function runColumnarCipher() {
             let text = document.getElementById('columnar-text').value.toUpperCase().replace(/\s+/g, '');
@@ -1084,7 +1095,6 @@
             const numRows = Math.ceil(text.length / numCols);
 
             if (mode === 'encipher') {
-                // Build the grid
                 let grid = [];
                 for (let i = 0; i < text.length; i += numCols) {
                     grid.push(text.slice(i, i + numCols).split(''));
@@ -1094,7 +1104,6 @@
                 grid.forEach(row => steps.push(row.join(' ')));
                 steps.push(`\nReading columns by alphabetical order of the key...`);
 
-                // Read columns based on sorted key order
                 for (let i = 0; i < numCols; i++) {
                     let colIndex = keyArr[i].index;
                     let colText = '';
@@ -1105,7 +1114,6 @@
                     steps.push(`- Reading Column ${colIndex + 1} (Order ${i + 1}): ${colText}`);
                 }
             } else {
-                // Decipher
                 let colLengths = new Array(numCols).fill(Math.floor(text.length / numCols));
                 for(let i = 0; i < text.length % numCols; i++) {
                     colLengths[i]++;
@@ -1146,13 +1154,11 @@
                 resultBox.style.display = 'block';
             }
 
-            // Regex check for exactly 16 hex characters
             if (!/^[0-9A-F]{16}$/.test(hexText)) {
                 showMessage('Error: Please enter exactly 16 Valid Hexadecimal characters (0-9, A-F).');
                 return;
             }
 
-            // DES Initial Permutation Table
             const IP = [
                 58, 50, 42, 34, 26, 18, 10, 2,
                 60, 52, 44, 36, 28, 20, 12, 4,
@@ -1164,7 +1170,6 @@
                 63, 55, 47, 39, 31, 23, 15, 7
             ];
 
-            // DES Inverse Initial Permutation Table
             const IP_INV = [
                 40, 8, 48, 16, 56, 24, 64, 32,
                 39, 7, 47, 15, 55, 23, 63, 31,
@@ -1179,7 +1184,6 @@
             const table = permType === 'IP' ? IP : IP_INV;
             const tableName = permType === 'IP' ? "Initial Permutation (IP)" : "Inverse Initial Permutation (IP⁻¹)";
 
-            // Convert Hex to 64-bit Binary String
             let binText = hexText.split('').map(hex => parseInt(hex, 16).toString(2).padStart(4, '0')).join('');
             
             steps.push(`1. Convert 16-char Hex to 64-bit Binary:`);
@@ -1191,14 +1195,12 @@
 
             let permutedBin = '';
             for (let i = 0; i < 64; i++) {
-                // Table values are 1-indexed, strings are 0-indexed
                 permutedBin += binText[table[i] - 1]; 
             }
 
             steps.push(`Output Binary Structure (Grouped by Bytes):`);
             steps.push(`Bin: ${permutedBin.match(/.{1,8}/g).join(' ')}\n`);
 
-            // Convert back to Hex
             let resultHex = '';
             for (let i = 0; i < 64; i += 4) {
                 resultHex += parseInt(permutedBin.slice(i, i + 4), 2).toString(16).toUpperCase();
@@ -1209,7 +1211,7 @@
             displayResult(resultHex, steps, 'des-result');
         }
         
-        /* --- Storage Formula Calculator Logic (Unchanged) --- */
+        /* --- Storage Formula Calculator Logic --- */
         
         const conversionFactors = ['s', 'ms', 'us', 'ns'];
         const dataConversionFactors = ["B", "K", "M", "G"];
@@ -1361,7 +1363,6 @@
 
         /* --- ICT133 Project Functions --- */
 
-        // --- Super Anagram Checker ---
         function isAnagram(word1, word2) {
             const normalize = str => str.toLowerCase().split('').sort().join('');
             return normalize(word1) === normalize(word2);
@@ -1448,7 +1449,7 @@
                 players: treasureGameStats.players,
                 boardSize: boardSize,
                 board: getNewTreasureBoard(boardSize),
-                scores: [0, 0], // Round scores
+                scores: [0, 0], 
                 currentPlayer: Math.random() < 0.5 ? 0 : 1,
                 totalTreasures: Math.floor((boardSize * boardSize) / 2),
                 treasuresFound: 0,
@@ -1532,7 +1533,7 @@
         function updateGameStatus() {
             const statusElement = document.getElementById('treasure-game-status');
             const controlsElement = document.getElementById('treasure-game-controls');
-            controlsElement.innerHTML = ''; // Clear previous controls
+            controlsElement.innerHTML = ''; 
             
             let roundScoresText = `Round Score: ${treasureGame.players[0]} - ${treasureGame.scores[0]} | ${treasureGame.players[1]} - ${treasureGame.scores[1]}`;
             let overallScoresText = `Overall Score: ${treasureGameStats.players[0]} - ${treasureGameStats.scores[0]} | ${treasureGameStats.players[1]} - ${treasureGameStats.scores[1]}`;
@@ -1552,10 +1553,8 @@
                         treasureGameStats.scores[0] += 0.5;
                         treasureGameStats.scores[1] += 0.5;
                     }
-                    treasureGame.statsUpdated = true; // Prevent scores from updating multiple times
-                }
-                 // Re-fetch the result text if already updated
-                else {
+                    treasureGame.statsUpdated = true;
+                } else {
                      if (treasureGame.scores[0] > treasureGame.scores[1]) {
                         roundResultText = `<strong>${treasureGame.players[0]} wins the round!</strong>`;
                     } else if (treasureGame.scores[1] > treasureGame.scores[0]) {
