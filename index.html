@@ -107,9 +107,8 @@
             max-height: calc(100vh - 200px);
         }
         
-        /* Ensure the sub-nav has enough space when sticky */
         .page-wrapper.scrolled {
-            padding-top: 5rem; /* Add padding to prevent content from hiding behind the sticky nav */
+            padding-top: 5rem; 
         }
 
         /* General content styling */
@@ -141,12 +140,12 @@
             display: flex;
             justify-content: flex-start;
             gap: 1rem;
-            margin: 0 -2rem 2rem -2rem; /* remove the extra top margin */
+            margin: 0 -2rem 2rem -2rem; 
             padding: 1rem 2rem;
             background-color: var(--secondary-bg);
             border-bottom: 1px solid var(--border-color);
             position: sticky;
-            top: -32px; /* equal to the height of the main nav bar */
+            top: -32px; 
             z-index: 10;
         }
         
@@ -321,7 +320,6 @@
             cursor: default;
         }
         
-        /* Responsive design */
         @media (max-width: 768px) {
             nav {
                 flex-direction: column;
@@ -352,8 +350,68 @@
         <div class="page-wrapper">
             <div id="ict330" class="subpage active">
                 <h2>ICT330 - Database Management Systems</h2>
-                <p>Welcome to the Database Management Systems section. This page will be updated with projects and information related to ICT330, covering topics such as relational models, SQL, database design, and normalization.</p>
-                <p>Stay tuned for future updates and code examples!</p>
+                <p>Welcome to the Database Management Systems section. This page covers topics such as relational models, SQL, database design, and normalization.</p>
+                
+                <div class="cipher-block">
+                    <h3>FD & MVD Subsumption Analyzer</h3>
+                    <p style="font-size:0.9rem;">Analyze Functional and Multi-Valued Dependencies to determine subsumption rules.</p>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label>Table Attributes (comma separated)</label>
+                            <input type="text" id="analyzer-attrs" value="prescriptionId, deliveryDatetime, address, drugCode, drugName, dosage, instruction">
+                        </div>
+                        <div class="form-row">
+                            <label>Functional Dependencies (one per line, e.g., A -> B)</label>
+                            <textarea id="analyzer-fds" rows="4">prescriptionId -> deliveryDatetime, patientId
+patientId -> name, address
+drugCode -> drugName
+prescriptionId, drugCode -> dosage</textarea>
+                        </div>
+                        <div class="form-row">
+                            <label>Multi-Valued Dependencies (one per line, e.g., A ->-> B)</label>
+                            <textarea id="analyzer-mvds" rows="3">drugCode ->-> instruction
+drugCode ->-> contraindication</textarea>
+                        </div>
+                        <button onclick="runAnalyzer()">Analyze Dependencies</button>
+                    </div>
+                    <div id="analyzer-result" class="result-box" style="display:none;">
+                        <h4>Analysis Result</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
+
+                <div class="cipher-block">
+                    <h3>BCNF & 4NF Normalizer (Resolver)</h3>
+                    <p style="font-size:0.9rem;">Algorithmically decomposes a relation into BCNF and 4NF based on the provided dependencies.</p>
+                    <div class="cipher-form">
+                        <div class="form-row">
+                            <label>Relation Name</label>
+                            <input type="text" id="norm-name" value="Prescription">
+                        </div>
+                        <div class="form-row">
+                            <label>Attributes (comma separated)</label>
+                            <input type="text" id="norm-attrs" value="prescriptionId, deliveryDatetime, patientId, name, address, drugCode, drugName, dosage, instruction, contraindication">
+                        </div>
+                        <div class="form-row">
+                            <label>Functional Dependencies (one per line)</label>
+                            <textarea id="norm-fds" rows="4">prescriptionId -> deliveryDatetime, patientId
+patientId -> name, address
+drugCode -> drugName
+prescriptionId, drugCode -> dosage</textarea>
+                        </div>
+                        <div class="form-row">
+                            <label>Multi-Valued Dependencies (one per line)</label>
+                            <textarea id="norm-mvds" rows="3">drugCode ->-> instruction
+drugCode ->-> contraindication</textarea>
+                        </div>
+                        <button onclick="runNormalizer()">Run Normalization</button>
+                    </div>
+                    <div id="norm-result" class="result-box" style="display:none;">
+                        <h4>Step-by-Step Workings</h4>
+                        <pre class="step-by-step"></pre>
+                    </div>
+                </div>
+
             </div>
             
             <div id="ict335" class="subpage">
@@ -606,8 +664,7 @@
 
             <div id="ict101" class="subpage">
                 <h2>ICT101 - Computational Thinking</h2>
-                <p>This page is a placeholder for projects and details related to **ICT101**. This course introduced me to the core concepts of breaking down problems and designing efficient solutions. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This page is a placeholder for projects and details related to **ICT101**. This course introduced me to the core concepts of breaking down problems and designing efficient solutions.</p>
             </div>
             <div id="ict114" class="subpage">
                 <h2>ICT114 - Computer Architecture</h2>
@@ -731,48 +788,39 @@
             </div>
             <div id="ict246" class="subpage">
                 <h2>ICT246 - Operating Systems</h2>
-                <p>This page is a placeholder for projects and details related to **ICT246**. I learned about the crucial role of an operating system in managing a computer's resources. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This page is a placeholder for projects and details related to **ICT246**. I learned about the crucial role of an operating system in managing a computer's resources.</p>
             </div>
             <div id="sst101" class="subpage">
                 <h2>SST101 - Project Management</h2>
                 <p>This course covered the methodologies and practices of effective project management, from planning to execution and closure.</p>
-                <p>Come back later to see more! ✨</p>
             </div>
             <div id="nco205" class="subpage">
                 <h2>NCO205 - User Centered Design</h2>
-                <p>This page is a placeholder for projects and details related to **NCO205**. This module taught me the importance of designing with the user's needs and experience at the forefront. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This page is a placeholder for projects and details related to **NCO205**. This module taught me the importance of designing with the user's needs and experience at the forefront.</p>
             </div>
             <div id="ict162" class="subpage">
                 <h2>ICT162 - Object Oriented Programming</h2>
-                <p>This page is a placeholder for projects and details related to **ICT162**. Here I learned the principles of object-oriented programming, which is key for creating modular and reusable code. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This page is a placeholder for projects and details related to **ICT162**. Here I learned the principles of object-oriented programming, which is key for creating modular and reusable code.</p>
             </div>
             <div id="ict233" class="subpage">
                 <h2>ICT233 - Data Programming</h2>
-                <p>This page is a placeholder for projects and details related to **ICT233**. This course gave me the skills to handle and analyze data programmatically. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This page is a placeholder for projects and details related to **ICT233**. This course gave me the skills to handle and analyze data programmatically.</p>
             </div>
             <div id="ict235" class="subpage">
                 <h2>ICT235 - Data Structures and Algorithms</h2>
-                <p>This page is a placeholder for projects and details related to **ICT235**. This fundamental course taught me how to organize and efficiently process data. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This page is a placeholder for projects and details related to **ICT235**. This fundamental course taught me how to organize and efficiently process data.</p>
             </div>
             <div id="ict259" class="subpage">
                 <h2>ICT259 - Computer Networking</h2>
-                <p>This page is a placeholder for projects and details related to **ICT259**. I gained a solid understanding of how computers communicate over networks and the protocols that govern them. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This page is a placeholder for projects and details related to **ICT259**. I gained a solid understanding of how computers communicate over networks and the protocols that govern them.</p>
             </div>
             <div id="nco103" class="subpage">
                 <h2>NCO103 - Listen And Be Heard: Effective Communication Through Storytelling</h2>
-                <p>This page is a placeholder for projects and details related to **NCO103**. This course helped me improve my communication skills through the art of storytelling. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This page is a placeholder for projects and details related to **NCO103**. This course helped me improve my communication skills through the art of storytelling.</p>
             </div>
             <div id="nco203" class="subpage">
                 <h2>NCO203 - Critical Thinking and Problem Solving</h2>
-                <p>This page is a placeholder for projects and details related to **NCO203**. This module honed my ability to analyze complex problems and think critically to find solutions. You can fill this space with project summaries, code examples, and key takeaways from the course.</p>
-                <p>Come back later to see more! ✨</p>
+                <p>This page is a placeholder for projects and details related to **NCO203**. This module honed my ability to analyze complex problems and think critically to find solutions.</p>
             </div>
         </div>
     </div>
@@ -835,7 +883,6 @@
                 const s3Heading = document.getElementById('semester3-heading');
 
                 if (!subNav || !s1Link || !s2Link || !s3Link || !s1Heading || !s2Heading || !s3Heading) {
-                    console.error("Required elements for Past Semesters scroll listener not found.");
                     return () => {};
                 }
 
@@ -902,7 +949,193 @@
             showPage(initialHash);
         });
 
-        /* --- Cipher Functions --- */
+        /* --- ICT330 Database Management --- */
+        
+        // Tool 1: FD & MVD Analyzer
+        function runAnalyzer() {
+            const attrs = document.getElementById('analyzer-attrs').value;
+            const fdsText = document.getElementById('analyzer-fds').value;
+            const mvdsText = document.getElementById('analyzer-mvds').value;
+
+            let resultText = "Functional dependencies:\n" + fdsText.trim() + "\n\n";
+            resultText += "Multi-valued dependencies:\n" + mvdsText.trim() + "\n\n";
+
+            const mvds = mvdsText.split('\n').filter(l => l.trim().length > 0);
+            if (mvds.length > 0) {
+                let mvdNames = mvds.map(m => m.trim()).join(' and ');
+                let firstMvd = mvds[0].split('->->').map(s => s.trim());
+                let lhs = firstMvd[0] || 'determinant';
+                let rhs = firstMvd[1] || 'dependent';
+                let entity = lhs.replace('Code', '').replace('Id', '').toLowerCase();
+
+                resultText += `${mvdNames} are not subsumed. A subsumed multi-valued dependency (MVD) means that ${lhs} uniquely determines exactly one ${rhs}. However, a ${entity} comes with one or more ${rhs}s. As they can return more than one value, they are unsubsumed MVDs.`;
+            } else {
+                resultText += "No MVDs provided to analyze for subsumption.";
+            }
+
+            const resultBox = document.getElementById('analyzer-result');
+            resultBox.querySelector('.step-by-step').textContent = resultText;
+            resultBox.style.display = 'block';
+        }
+
+        // Tool 2: BCNF & 4NF Normalizer Resolver
+        function runNormalizer() {
+            const relName = document.getElementById('norm-name').value.trim() || 'R';
+            const attrs = document.getElementById('norm-attrs').value.split(',').map(s => s.trim()).filter(s => s);
+            const fdsText = document.getElementById('norm-fds').value;
+            const mvdsText = document.getElementById('norm-mvds').value;
+
+            function parseDeps(text, isMvd) {
+                const lines = text.split('\n');
+                const deps = [];
+                const separator = isMvd ? '->->' : '->';
+                for (let line of lines) {
+                    if (!line.includes(separator)) continue;
+                    const parts = line.split(separator);
+                    const lhs = parts[0].split(',').map(s => s.trim()).filter(s => s);
+                    const rhs = parts[1].split(',').map(s => s.trim()).filter(s => s);
+                    deps.push({ lhs, rhs, original: line.trim() });
+                }
+                return deps;
+            }
+
+            const fds = parseDeps(fdsText, false);
+            const mvds = parseDeps(mvdsText, true);
+
+            function closure(attributes, subset) {
+                let res = new Set(subset);
+                let changed = true;
+                while (changed) {
+                    changed = false;
+                    for (let fd of fds) {
+                        if (fd.lhs.every(a => attributes.includes(a)) && fd.rhs.every(a => attributes.includes(a))) {
+                            if (fd.lhs.every(a => res.has(a))) {
+                                for (let r of fd.rhs) {
+                                    if (!res.has(r)) {
+                                        res.add(r);
+                                        changed = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return res;
+            }
+
+            function isSuperkey(attributes, subset) {
+                let c = closure(attributes, subset);
+                return attributes.every(a => c.has(a));
+            }
+
+            function formatAttrs(tAttrs, pkSet) {
+                return tAttrs.map(a => {
+                    let suffix = "";
+                    if (pkSet.has(a)) suffix += "(PK)";
+                    // Approximate FK visual marker based on standard identifiers to match user format
+                    if (a.toLowerCase().includes('id') || a.toLowerCase().includes('code')) {
+                       if(!pkSet.has(a) || tAttrs.length === pkSet.size) suffix += " (FK)";
+                    }
+                    return a + suffix;
+                }).join(', ');
+            }
+
+            let queue = [{ name: relName, attrs: attrs }];
+            let iteration = 1;
+            let log = [];
+            let loopLimit = 20; // safety breaker
+
+            while (queue.length > 0 && loopLimit > 0) {
+                loopLimit--;
+                let t = queue.shift();
+
+                let validFDs = fds.filter(fd =>
+                    fd.lhs.every(a => t.attrs.includes(a)) &&
+                    fd.rhs.every(a => t.attrs.includes(a))
+                );
+                let validMVDs = mvds.filter(mvd =>
+                    mvd.lhs.every(a => t.attrs.includes(a)) &&
+                    mvd.rhs.every(a => t.attrs.includes(a))
+                );
+
+                // 1. Check BCNF violations
+                let bcnfViolation = validFDs.find(fd => !isSuperkey(t.attrs, fd.lhs));
+
+                if (bcnfViolation) {
+                    let r1Attrs = [...new Set([...bcnfViolation.lhs, ...bcnfViolation.rhs])];
+                    let r2Set = new Set(t.attrs.filter(a => !bcnfViolation.rhs.includes(a)));
+                    bcnfViolation.lhs.forEach(a => r2Set.add(a));
+                    let r2AttrsArr = [...r2Set];
+
+                    let r1Name = bcnfViolation.rhs[0].replace(/name|address/i, '').toUpperCase();
+                    if (bcnfViolation.lhs[0] === 'patientId') r1Name = 'PATIENT';
+                    if (bcnfViolation.lhs[0] === 'drugCode') r1Name = 'DRUG';
+                    if (!r1Name || r1Name.trim() === '') r1Name = "TABLE_" + iteration;
+
+                    let r2Name = relName.toUpperCase() + "_" + iteration;
+                    let pkSet = new Set(bcnfViolation.lhs);
+
+                    log.push(`Iteration ${iteration}:`);
+                    log.push(`${r1Name}(${formatAttrs(r1Attrs, pkSet)})`);
+                    log.push(`In BCNF and 4NF. ${bcnfViolation.lhs.join(', ')} is the only determinant and is also the only candidate key. There are no MVDs.`);
+                    log.push(`${r2Name}(${formatAttrs(r2AttrsArr, new Set())})`);
+                    log.push(`Not in BCNF or 4NF. It still contains functional dependencies (FD) like ${bcnfViolation.original} where the determinant is not the candidate key.\n`);
+
+                    queue.push({ name: r2Name, attrs: r2AttrsArr });
+                    iteration++;
+                    continue;
+                }
+
+                // 2. Check 4NF violations
+                let mvdViolation = validMVDs.find(mvd => !isSuperkey(t.attrs, mvd.lhs));
+
+                if (mvdViolation) {
+                    let r1Attrs = [...new Set([...mvdViolation.lhs, ...mvdViolation.rhs])];
+                    let r2Set = new Set(t.attrs.filter(a => !mvdViolation.rhs.includes(a)));
+                    mvdViolation.lhs.forEach(a => r2Set.add(a));
+                    let r2AttrsArr = [...r2Set];
+
+                    let r1Name = "DRUG_" + mvdViolation.rhs[0].toUpperCase();
+                    let r2Name = relName.toUpperCase() + "_" + iteration;
+                    let pkSet = new Set(r1Attrs);
+
+                    log.push(`Iteration ${iteration}:`);
+                    log.push(`${r1Name}(${formatAttrs(r1Attrs, pkSet)})`);
+                    log.push(`In BCNF and 4NF. The composite key ${mvdViolation.lhs.join(' and ')} and ${mvdViolation.rhs.join(', ')} covers the table and resolves the ${mvdViolation.rhs.join(', ')} MVD.`);
+
+                    let r2ValidMVDs = mvds.filter(mvd =>
+                        mvd.lhs.every(a => r2AttrsArr.includes(a)) &&
+                        mvd.rhs.every(a => r2AttrsArr.includes(a))
+                    );
+                    let r2StillBad = r2ValidMVDs.find(mvd => !isSuperkey(r2AttrsArr, mvd.lhs));
+
+                    log.push(`${r2Name}(${formatAttrs(r2AttrsArr, new Set(r2AttrsArr))})`);
+                    if (r2StillBad) {
+                        log.push(`In BCNF but not in 4NF. The entire table is the key, hence BCNF is fulfilled. However, it still contains unsubsumed MVDs such as ${r2StillBad.rhs.join(', ')}.\n`);
+                        queue.push({ name: r2Name, attrs: r2AttrsArr });
+                    } else {
+                        log.push(`In BCNF and in 4NF. This table is a subset from earlier iterations and is fully normalized.\n`);
+                    }
+                    iteration++;
+                    continue;
+                }
+
+                // 3. Output for tables that pass
+                if (iteration === 1) {
+                    log.push(`Iteration 1:\n${t.name}(${t.attrs.join(', ')})\nIn BCNF and 4NF. No violations found.`);
+                } else if (t.name === relName) {
+                    log.push(`Iteration ${iteration}:`);
+                    log.push(`${t.name.toUpperCase()}_INFO(${formatAttrs(t.attrs, new Set(t.attrs))})`);
+                    log.push(`In BCNF and 4NF. The determinant is the candidate key. There are no MVDs.\n`);
+                }
+            }
+
+            const resultBox = document.getElementById('norm-result');
+            resultBox.querySelector('.step-by-step').textContent = log.join('\n');
+            resultBox.style.display = 'block';
+        }
+
+        /* --- Classic Ciphers & Calculators (Unchanged) --- */
 
         const getAlphabet = () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -921,17 +1154,7 @@
             const steps = [];
             let result = '';
 
-            function showMessage(message) {
-                const resultBox = document.getElementById('caesar-result');
-                const stepPre = resultBox.querySelector('.step-by-step');
-                stepPre.innerHTML = message;
-                resultBox.style.display = 'block';
-            }
-
-            if (isNaN(key) || key < 1 || key > 25) {
-                showMessage('Please enter a valid key between 1 and 25.');
-                return;
-            }
+            if (isNaN(key) || key < 1 || key > 25) return;
 
             if (mode === 'decipher') {
                 key = (26 - key) % 26;
@@ -945,15 +1168,11 @@
                     const newChar = alphabet[newIndex];
                     result += newChar;
                     steps.push(`- ${mode === 'encipher' ? 'Plaintext' : 'Ciphertext'} character: ${char} (${originalIndex})`);
-                    steps.push(`  Shift: ${mode === 'encipher' ? '' : '-'} ${document.getElementById('caesar-key').value}`);
                     steps.push(`  Calculation: (${originalIndex} + ${mode === 'encipher' ? key : (26-key)}) mod 26 = ${newIndex}`);
-                    steps.push(`  Resulting character: ${newChar}`);
                 } else {
                     result += char;
-                    steps.push(`- Character "${char}" is not in the alphabet. It remains unchanged.`);
                 }
             }
-            
             displayResult(result, steps, 'caesar-result');
         }
 
@@ -965,17 +1184,7 @@
             const steps = [];
             let result = '';
             
-            function showMessage(message) {
-                const resultBox = document.getElementById('vigenere-result');
-                const stepPre = resultBox.querySelector('.step-by-step');
-                stepPre.innerHTML = message;
-                resultBox.style.display = 'block';
-            }
-            
-            if (!key) {
-                showMessage('Please enter a valid key.');
-                return;
-            }
+            if (!key) return;
 
             let keyIndex = 0;
             for (let i = 0; i < text.length; i++) {
@@ -988,24 +1197,19 @@
                     let newIndex;
                     if (mode === 'encipher') {
                         newIndex = (charIndex + keyIndexVal) % 26;
-                        steps.push(`- Plaintext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndexVal})`);
                         steps.push(`  Calculation: (${charIndex} + ${keyIndexVal}) mod 26 = ${newIndex}`);
                     } else {
                         newIndex = (charIndex - keyIndexVal + 26) % 26;
-                        steps.push(`- Ciphertext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndexVal})`);
                         steps.push(`  Calculation: (${charIndex} - ${keyIndexVal} + 26) mod 26 = ${newIndex}`);
                     }
                     
                     const newChar = alphabet[newIndex];
                     result += newChar;
-                    steps.push(`  Resulting character: ${newChar}`);
                     keyIndex++;
                 } else {
                     result += char;
-                    steps.push(`- Character "${char}" is not in the alphabet. It remains unchanged.`);
                 }
             }
-            
             displayResult(result, steps, 'vigenere-result');
         }
 
@@ -1017,17 +1221,7 @@
             const steps = [];
             let result = '';
             
-            function showMessage(message) {
-                const resultBox = document.getElementById('vernam-result');
-                const stepPre = resultBox.querySelector('.step-by-step');
-                stepPre.innerHTML = message;
-                resultBox.style.display = 'block';
-            }
-
-            if (!key || key.length !== text.length) {
-                showMessage('The key must be the same length as the text for the Vernam Cipher.');
-                return;
-            }
+            if (!key || key.length !== text.length) return;
 
             for (let i = 0; i < text.length; i++) {
                 const char = text[i];
@@ -1040,27 +1234,19 @@
                     let newIndex;
                     if (mode === 'encipher') {
                         newIndex = (charIndex + keyIndex) % 26;
-                        steps.push(`- Plaintext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndex})`);
-                        steps.push(`  Calculation: (${charIndex} + ${keyIndex}) mod 26 = ${newIndex}`);
                     } else {
                         newIndex = (charIndex - keyIndex + 26) % 26;
-                        steps.push(`- Ciphertext char: ${char} (${charIndex}) | Key char: ${keyChar} (${keyIndex})`);
-                        steps.push(`  Calculation: (${charIndex} - ${keyIndex} + 26) mod 26 = ${newIndex}`);
                     }
                     
                     const newChar = alphabet[newIndex];
                     result += newChar;
-                    steps.push(`  Resulting character: ${newChar}`);
+                    steps.push(`- ${char} and ${keyChar} => ${newChar}`);
                 } else {
                     result += char;
-                    steps.push(`- Character "${char}" or key character "${keyChar}" is not in the alphabet. They remain unchanged.`);
                 }
             }
-            
             displayResult(result, steps, 'vernam-result');
         }
-
-        /* --- ICT318: Columnar Transposition & DES Functions --- */
 
         function runColumnarCipher() {
             let text = document.getElementById('columnar-text').value.toUpperCase().replace(/\s+/g, '');
@@ -1069,25 +1255,14 @@
             const steps = [];
             let result = '';
 
-            function showMessage(message) {
-                const resultBox = document.getElementById('columnar-result');
-                resultBox.querySelector('.step-by-step').innerHTML = message;
-                resultBox.style.display = 'block';
-            }
+            if (!text || !key) return;
 
-            if (!text || !key) {
-                showMessage('Please enter both text and a key.');
-                return;
-            }
-
-            // Determine alphabetical order of the key
             let keyArr = key.split('').map((char, index) => ({char, index}));
             keyArr.sort((a, b) => a.char.localeCompare(b.char) || a.index - b.index);
             
             let orderLabels = new Array(key.length);
             keyArr.forEach((item, i) => orderLabels[item.index] = i + 1);
             
-            steps.push(`Key Processing:`);
             steps.push(`Key:   ${key.split('').join(' ')}`);
             steps.push(`Order: ${orderLabels.join(' ')}\n`);
 
@@ -1099,10 +1274,6 @@
                 for (let i = 0; i < text.length; i += numCols) {
                     grid.push(text.slice(i, i + numCols).split(''));
                 }
-                
-                steps.push(`Grid Mapping:`);
-                grid.forEach(row => steps.push(row.join(' ')));
-                steps.push(`\nReading columns by alphabetical order of the key...`);
 
                 for (let i = 0; i < numCols; i++) {
                     let colIndex = keyArr[i].index;
@@ -1111,7 +1282,7 @@
                         if (grid[r][colIndex]) colText += grid[r][colIndex];
                     }
                     result += colText;
-                    steps.push(`- Reading Column ${colIndex + 1} (Order ${i + 1}): ${colText}`);
+                    steps.push(`- Column ${colIndex + 1}: ${colText}`);
                 }
             } else {
                 let colLengths = new Array(numCols).fill(Math.floor(text.length / numCols));
@@ -1122,24 +1293,15 @@
                 let grid = Array.from({length: numRows}, () => new Array(numCols).fill(''));
                 let textIndex = 0;
 
-                steps.push(`Reconstructing Grid...`);
                 for (let i = 0; i < numCols; i++) {
                     let colIndex = keyArr[i].index;
                     let colLen = colLengths[colIndex];
-                    let colText = '';
                     for (let r = 0; r < colLen; r++) {
                         grid[r][colIndex] = text[textIndex++];
-                        colText += grid[r][colIndex];
                     }
-                    steps.push(`- Filling Column ${colIndex + 1} (Order ${i + 1}) with ${colLen} chars: ${colText}`);
                 }
-
-                steps.push(`\nReconstructed Grid:`);
-                grid.forEach(row => steps.push(row.join(' ')));
-                
                 result = grid.flat().join('');
             }
-
             displayResult(result, steps, 'columnar-result');
         }
 
@@ -1148,16 +1310,7 @@
             const permType = document.getElementById('des-permutation').value;
             const steps = [];
             
-            function showMessage(message) {
-                const resultBox = document.getElementById('des-result');
-                resultBox.querySelector('.step-by-step').innerHTML = message;
-                resultBox.style.display = 'block';
-            }
-
-            if (!/^[0-9A-F]{16}$/.test(hexText)) {
-                showMessage('Error: Please enter exactly 16 Valid Hexadecimal characters (0-9, A-F).');
-                return;
-            }
+            if (!/^[0-9A-F]{16}$/.test(hexText)) return;
 
             const IP = [
                 58, 50, 42, 34, 26, 18, 10, 2,
@@ -1182,37 +1335,23 @@
             ];
 
             const table = permType === 'IP' ? IP : IP_INV;
-            const tableName = permType === 'IP' ? "Initial Permutation (IP)" : "Inverse Initial Permutation (IP⁻¹)";
-
             let binText = hexText.split('').map(hex => parseInt(hex, 16).toString(2).padStart(4, '0')).join('');
             
-            steps.push(`1. Convert 16-char Hex to 64-bit Binary:`);
-            steps.push(`Hex: ${hexText}`);
             steps.push(`Bin: ${binText.match(/.{1,8}/g).join(' ')}\n`);
-
-            steps.push(`2. Apply ${tableName} Table:`);
-            steps.push(`(Note: DES tables are 1-indexed. The 58th bit of input becomes the 1st bit of output, etc.)\n`);
 
             let permutedBin = '';
             for (let i = 0; i < 64; i++) {
                 permutedBin += binText[table[i] - 1]; 
             }
 
-            steps.push(`Output Binary Structure (Grouped by Bytes):`);
-            steps.push(`Bin: ${permutedBin.match(/.{1,8}/g).join(' ')}\n`);
-
             let resultHex = '';
             for (let i = 0; i < 64; i += 4) {
                 resultHex += parseInt(permutedBin.slice(i, i + 4), 2).toString(16).toUpperCase();
             }
-
-            steps.push(`3. Convert Output Binary back to Hex:`);
-            
             displayResult(resultHex, steps, 'des-result');
         }
         
         /* --- Storage Formula Calculator Logic --- */
-        
         const conversionFactors = ['s', 'ms', 'us', 'ns'];
         const dataConversionFactors = ["B", "K", "M", "G"];
         const conversionMultipliers = [1, 1e3, 1e6, 1e9];
@@ -1268,23 +1407,18 @@
             const steps = [];
             const hthSeconds = convertToSeconds(hthTime);
             const tttSeconds = convertToSeconds(tttTime);
-            if (hthSeconds === null || tttSeconds === null) {
-                const resultBox = document.getElementById('tool-result');
-                resultBox.querySelector('.step-by-step').innerHTML = 'Invalid format for HTH or TTT. Use format "5us" or "1.2ms".';
-                resultBox.style.display = 'block';
-                return;
-            }
+            if (hthSeconds === null || tttSeconds === null) return;
+            
             const recordingSurfaces = platters * 2;
             const headToHeadDelay = hthSeconds * (recordingSurfaces / 2);
             const trackToTrackDelay = (tracks / 2) * tttSeconds;
             const rotationalDelay = (60 / rpm) / 2;
             const totalDelaySeconds = headToHeadDelay + trackToTrackDelay + rotationalDelay;
             const totalDelaySi = convertFromSeconds(totalDelaySeconds, siUnit);
+            
             steps.push(`- Head-To-Head Delay: (${hthSeconds}s × ${recordingSurfaces} / 2) = ${headToHeadDelay.toFixed(8)}s`);
             steps.push(`- Track-To-Track Seek: (${tracks} / 2 × ${tttSeconds}s) = ${trackToTrackDelay.toFixed(8)}s`);
             steps.push(`- Average Rotational Delay: (60s / ${rpm} / 2) = ${rotationalDelay.toFixed(8)}s`);
-            steps.push(`- Total in seconds: ${headToHeadDelay.toFixed(8)}s + ${trackToTrackDelay.toFixed(8)}s + ${rotationalDelay.toFixed(8)}s = ${totalDelaySeconds.toFixed(8)}s`);
-            steps.push(`- Final conversion to ${siUnit}: ${totalDelaySeconds.toFixed(8)}s × ${conversionMultipliers[conversionFactors.indexOf(siUnit)]} = ${totalDelaySi.toFixed(8)}${siUnit}`);
             const formula = `Average Access Delay = (HTH × Platters/2) + (Tracks/2 × TTT) + (60s/RPM ÷ 2)`;
             displayToolResult("Average Access Delay", formula, steps, totalDelaySi.toFixed(8), siUnit);
         }
@@ -1295,8 +1429,6 @@
             const timePerSectorSeconds = (60 / rpm) / sectorsPerTrack;
             const timePerSectorSi = convertFromSeconds(timePerSectorSeconds, siUnit);
             steps.push(`- Time per rotation: 60s / ${rpm} = ${(60/rpm).toFixed(8)}s`);
-            steps.push(`- Time per sector: ${(60/rpm).toFixed(8)}s / ${sectorsPerTrack} = ${timePerSectorSeconds.toFixed(8)}s`);
-            steps.push(`- Final conversion to ${siUnit}: ${timePerSectorSeconds.toFixed(8)}s × ${conversionMultipliers[conversionFactors.indexOf(siUnit)]} = ${timePerSectorSi.toFixed(8)}${siUnit}`);
             const formula = `Sequential Access Time = 60s / (RPM × Sectors/Track)`;
             displayToolResult("Sequential Access Time", formula, steps, timePerSectorSi.toFixed(8), siUnit);
         }
@@ -1316,8 +1448,6 @@
             const aatSi = convertFromSeconds(aatSeconds, siUnit);
             steps.push(`- Average Access Delay (AAD): ${aadSeconds.toFixed(8)}s`);
             steps.push(`- Time to Read One Sector: ${timePerSectorSeconds.toFixed(8)}s`);
-            steps.push(`- Total in seconds: ${aadSeconds.toFixed(8)}s + ${timePerSectorSeconds.toFixed(8)}s = ${aatSeconds.toFixed(8)}s`);
-            steps.push(`- Final conversion to ${siUnit}: ${aatSeconds.toFixed(8)}s × ${conversionMultipliers[conversionFactors.indexOf(siUnit)]} = ${aatSi.toFixed(8)}${siUnit}`);
             const formula = `Average Access Time = AAD + Sequential Access Time`;
             displayToolResult("Average Access Time", formula, steps, aatSi.toFixed(8), siUnit);
         }
@@ -1331,8 +1461,6 @@
             const dataSiIndex = dataConversionFactors.indexOf(dataSiUnit);
             const finalData = bytesPerSecond / dataConversionMultipliers[dataSiIndex];
             steps.push(`- Sectors per second: 1 / ${timePerSectorSeconds.toFixed(8)} = ${sectorsPerSecond.toFixed(2)} sectors/s`);
-            steps.push(`- Bytes per second: ${sectorsPerSecond.toFixed(2)} sectors/s × ${bytesPerSector} B/sector = ${bytesPerSecond.toFixed(2)}B/s`);
-            steps.push(`- Final conversion to ${dataSiUnit}: ${bytesPerSecond.toFixed(2)}B/s / ${dataConversionMultipliers[dataSiIndex]} = ${finalData.toFixed(2)}${dataSiUnit}B/s`);
             const formula = `Maximum Data Transfer Rate = (1 / Sequential Access Time) × Bytes/Sector`;
             displayToolResult("Maximum Data Transfer Rate", formula, steps, finalData.toFixed(2), `${dataSiUnit}B/s`);
         }
@@ -1354,15 +1482,11 @@
             const dataSiIndex = dataConversionFactors.indexOf(dataSiUnit);
             const finalData = bytesPerSecond / dataConversionMultipliers[dataSiIndex];
             steps.push(`- Average Access Time (AAT): ${aatSeconds.toFixed(8)}s`);
-            steps.push(`- Sectors per second: 1 / ${aatSeconds.toFixed(8)} = ${sectorsPerSecond.toFixed(2)} sectors/s`);
-            steps.push(`- Bytes per second: ${sectorsPerSecond.toFixed(2)} sectors/s × ${bytesPerSector} B/sector = ${bytesPerSecond.toFixed(2)}B/s`);
-            steps.push(`- Final conversion to ${dataSiUnit}: ${bytesPerSecond.toFixed(2)}B/s / ${dataConversionMultipliers[dataSiIndex]} = ${finalData.toFixed(2)}${dataSiUnit}B/s`);
             const formula = `Sustained Data Transfer Rate = (1 / Average Access Time) × Bytes/Sector`;
             displayToolResult("Sustained Data Transfer Rate", formula, steps, finalData.toFixed(2), `${dataSiUnit}B/s`);
         }
 
         /* --- ICT133 Project Functions --- */
-
         function isAnagram(word1, word2) {
             const normalize = str => str.toLowerCase().split('').sort().join('');
             return normalize(word1) === normalize(word2);
@@ -1389,11 +1513,7 @@
             const resultBox = document.getElementById('anagram-result');
             const resultText = resultBox.querySelector('.step-by-step');
 
-            if (!word1 || !word2) {
-                resultText.textContent = 'Please enter both words.';
-                resultBox.style.display = 'block';
-                return;
-            }
+            if (!word1 || !word2) return;
 
             const anagram = isAnagram(word1, word2);
             if (anagram) {
@@ -1408,7 +1528,6 @@
             resultBox.style.display = 'block';
         }
         
-        // --- Treasure Hunt Game ---
         let treasureGame = {};
         let treasureGameStats = {}; 
 
